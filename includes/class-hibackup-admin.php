@@ -401,27 +401,15 @@ class HiBackup_Admin {
 											<li><strong>Bước 1:</strong> Truy cập <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer"><strong>Google Cloud Console</strong></a> và đăng nhập bằng tài khoản Gmail của bạn.</li>
 											<li><strong>Bước 2:</strong> Bấm vào danh sách Project ở góc trên cùng (bên cạnh logo Google Cloud) &gt; Bấm <strong>New Project</strong> &gt; Đặt tên (ví dụ: <em>HiBackup</em>) &gt; Bấm <strong>Create</strong>.</li>
 											<li><strong>Bước 3:</strong> Vào menu bên trái chọn <strong>APIs & Services &gt; Library</strong> &gt; Gõ tìm <code>Google Drive API</code> &gt; Nhấp vào và bấm nút <strong>Enable</strong>.</li>
-											<li><strong>Bước 4 (Cấu hình màn hình xác thực OAuth):</strong> Vào menu <strong>APIs & Services &gt; OAuth consent screen</strong>:
+											<li><strong>Bước 4 (Cấu hình màn hình xác thực):</strong> Vào menu <strong>APIs & Services &gt; OAuth consent screen</strong>:
 												<ul>
-													<li><strong>Nếu dùng giao diện mới (Menu cột trái: Branding, Audience, Clients...):</strong>
-														<ul>
-															<li>Vào mục <strong>Branding</strong>: Điền <em>App name</em>: <code>HiBackup</code>, chọn <em>User support email</em>, kéo xuống mục <em>Developer contact information</em> điền email của bạn &gt; Bấm <strong>Save</strong>.</li>
-															<li>Vào mục <strong>Audience</strong>: Mục <em>User type</em> chọn <strong>External</strong>; mục <strong>Test users</strong> bấm <strong>+ Add users</strong> &gt; Nhập email Gmail của bạn vào &gt; Bấm <strong>Save</strong>.</li>
-														</ul>
-													</li>
-													<li><strong>Nếu dùng giao diện cũ (Wizard 4 bước):</strong>
-														<ul>
-															<li>Chọn <strong>External</strong> &gt; Bấm <strong>Create</strong>.</li>
-															<li>Điền <em>App name</em>: <code>HiBackup</code>, điền email hỗ trợ &amp; email nhà phát triển &gt; Bấm <strong>Save and Continue</strong>.</li>
-															<li>Mục <em>Scopes</em>: Bấm <strong>Save and Continue</strong>.</li>
-															<li>Mục <em>Test users</em>: Bấm <strong>+ Add Users</strong> &gt; Nhập email Gmail của bạn &gt; Bấm <strong>Save and Continue</strong>.</li>
-														</ul>
-													</li>
+													<li>Vào menu con <strong>Branding</strong>: Điền <em>App name</em>: <code>HiBackup</code>, chọn <em>User support email</em>, kéo xuống mục <em>Developer contact information</em> điền email Gmail của bạn &gt; Bấm <strong>Save</strong>.</li>
+													<li>Vào menu con <strong>Audience</strong>: Mục <em>User type</em> chọn <strong>External</strong>; tại mục <strong>Test users</strong> bấm <strong>+ Add users</strong> &gt; Nhập email Gmail của bạn &gt; Bấm <strong>Save</strong>.</li>
 												</ul>
 											</li>
-											<li><strong>Bước 5 (Tạo khóa Client ID &amp; Secret):</strong> Vào menu <strong>APIs & Services &gt; Credentials</strong> (hoặc bấm mục <strong>Clients</strong> ở giao diện mới):
+											<li><strong>Bước 5 (Tạo khóa Client ID &amp; Secret):</strong> Nhấp vào menu con <strong>Clients</strong> (hoặc vào <strong>APIs & Services &gt; Credentials</strong>):
 												<ul>
-													<li>Bấm <strong>+ Create Credentials</strong> &gt; Chọn <strong>OAuth client ID</strong> (hoặc nút <strong>+ Create client</strong>).</li>
+													<li>Bấm nút <strong>+ Create client</strong> (hoặc <strong>+ Create Credentials &gt; OAuth client ID</strong>).</li>
 													<li>Mục <em>Application type</em>: Chọn <strong>Web application</strong>.</li>
 													<li>Mục <em>Name</em>: Đặt tên (ví dụ: <code>HiBackup Web</code>).</li>
 													<li>Mục <strong>Authorized redirect URIs</strong>: Bấm <strong>+ Add URI</strong> và copy chính xác đường link ở ô <code>URI chuyển hướng hợp lệ (Redirect URI)</code> ngay bên dưới dán vào.</li>
