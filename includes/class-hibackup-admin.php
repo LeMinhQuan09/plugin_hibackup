@@ -402,13 +402,22 @@ class HiBackup_Admin {
 											<li><strong>Bước 1:</strong> Truy cập <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer"><strong>Google Cloud Console</strong></a> và đăng nhập bằng tài khoản Gmail của bạn.</li>
 											<li><strong>Bước 2:</strong> Bấm vào danh sách Project ở góc trên cùng (bên cạnh logo Google Cloud) &gt; Bấm <strong>New Project</strong> &gt; Đặt tên (ví dụ: <em>HiBackup</em>) &gt; Bấm <strong>Create</strong>.</li>
 											<li><strong>Bước 3:</strong> Vào menu bên trái chọn <strong>APIs & Services &gt; Library</strong> &gt; Gõ tìm <code>Google Drive API</code> &gt; Nhấp vào và bấm nút <strong>Enable</strong>.</li>
-											<li><strong>Bước 4 (Cấu hình màn hình xác thực):</strong> Vào menu <strong>APIs & Services &gt; OAuth consent screen</strong>:
+											<li><strong>Bước 4 (Cấu hình thông tin App):</strong> Vào menu <strong>APIs & Services &gt; OAuth consent screen</strong> &gt; Nhấp vào mục con <strong>Branding</strong> bên trái:
 												<ul>
-													<li>Vào menu con <strong>Branding</strong>: Điền <em>App name</em>: <code>HiBackup</code>, chọn <em>User support email</em>, kéo xuống mục <em>Developer contact information</em> điền email Gmail của bạn &gt; Bấm <strong>Save</strong>.</li>
-													<li>Vào menu con <strong>Audience</strong>: Mục <em>User type</em> chọn <strong>External</strong>; tại mục <strong>Test users</strong> bấm <strong>+ Add users</strong> &gt; Nhập email Gmail của bạn &gt; Bấm <strong>Save</strong>.</li>
+													<li>Điền <em>App name</em>: <code>HiBackup</code>.</li>
+													<li>Chọn <em>User support email</em>: Chọn email Gmail của bạn.</li>
+													<li>Kéo xuống cuối mục <em>Developer contact information</em>: Nhập email Gmail của bạn &gt; Bấm <strong>Save</strong>.</li>
 												</ul>
 											</li>
-											<li><strong>Bước 5 (Tạo khóa Client ID &amp; Secret):</strong> Nhấp vào menu con <strong>Clients</strong> (hoặc vào <strong>APIs & Services &gt; Credentials</strong>):
+											<li><strong style="color: #b45309;">Bước 5 (Thêm Test User - Cực kỳ quan trọng để không bị lỗi 403):</strong>
+												<ul>
+													<li>Nhấp vào mục con <strong>Audience</strong> ở menu bên trái.</li>
+													<li>Cuộn chuột xuống phần <strong>Test users</strong> (Người dùng thử nghiệm).</li>
+													<li>Bấm nút <strong>+ Add users</strong> &gt; Nhập chính xác địa chỉ email Gmail bạn sẽ dùng để sao lưu &gt; Bấm <strong>Save</strong>.</li>
+													<li><em>(Ghi chú: Nếu bỏ qua bước này, Google sẽ chặn với thông báo "Lỗi 403: access_denied").</em></li>
+												</ul>
+											</li>
+											<li><strong>Bước 6 (Tạo khóa Client ID &amp; Secret):</strong> Nhấp vào mục con <strong>Clients</strong> (hoặc vào <strong>APIs & Services &gt; Credentials</strong>):
 												<ul>
 													<li>Bấm nút <strong>+ Create client</strong> (hoặc <strong>+ Create Credentials &gt; OAuth client ID</strong>).</li>
 													<li>Mục <em>Application type</em>: Chọn <strong>Web application</strong>.</li>
@@ -417,8 +426,13 @@ class HiBackup_Admin {
 													<li>Bấm <strong>Create</strong>. Google sẽ hiển thị popup chứa <strong>Client ID</strong> và <strong>Client Secret</strong> của bạn!</li>
 												</ul>
 											</li>
-											<li><strong>Bước 6:</strong> Copy <strong>Client ID</strong> và <strong>Client Secret</strong> dán vào 2 ô bên dưới &gt; Bấm nút <strong>Lưu Cài đặt</strong>.</li>
-											<li><strong>Bước 7:</strong> Bấm nút <strong>"🔗 Đăng nhập &amp; Ủy quyền Google Drive (1-Click)"</strong> bên dưới để hoàn tất liên kết!</li>
+											<li><strong>Bước 7:</strong> Copy <strong>Client ID</strong> và <strong>Client Secret</strong> dán vào 2 ô bên dưới &gt; Bấm nút <strong>Lưu Cài đặt</strong>.</li>
+											<li><strong>Bước 8 (Đăng nhập &amp; Ủy quyền):</strong>
+												<ul>
+													<li>Bấm nút <strong>"🔗 Đăng nhập &amp; Ủy quyền Google Drive (1-Click)"</strong> bên dưới.</li>
+													<li>Khi Google hiển thị cảnh báo <em>"Google chưa xác minh ứng dụng này"</em>: Bấm vào chữ <strong>Nâng cao (Advanced)</strong> ở góc dưới bên trái &gt; Bấm tiếp <strong>Đi tới... (không an toàn)</strong> &gt; Tích chọn cấp quyền truy cập Drive và bấm <strong>Tiếp tục</strong> là hoàn tất 100%!</li>
+												</ul>
+											</li>
 										</ol>
 									</div>
 								</details>
