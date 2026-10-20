@@ -252,9 +252,10 @@ class HiBackup_Admin {
 			<div class="hibackup-header">
 				<div class="hibackup-brand">
 					<span class="dashicons dashicons-cloud-upload"></span>
-					<h1>HiBackup <small>– Sao lưu WordPress lên Google Drive</small></h1>
+					<h2>HiBackup <small>– Sao lưu WordPress lên Google Drive</small></h2>
 				</div>
 			</div>
+			<hr class="wp-header-end">
 
 			<?php if ( isset( $_GET['status'] ) && 'saved' === $_GET['status'] ) : ?>
 				<div class="notice notice-success is-dismissible">

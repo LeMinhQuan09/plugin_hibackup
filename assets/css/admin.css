@@ -15,6 +15,9 @@
 	border-radius: 8px;
 	margin-bottom: 20px;
 	box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+	box-sizing: border-box;
+	width: 100%;
+	clear: both;
 }
 
 .hibackup-brand {
@@ -33,7 +36,8 @@
 	justify-content: center;
 }
 
-.hibackup-brand h1 {
+.hibackup-brand h1,
+.hibackup-brand h2 {
 	color: #ffffff;
 	font-size: 22px;
 	margin: 0;
@@ -42,11 +46,36 @@
 	line-height: 1.2;
 }
 
-.hibackup-brand h1 small {
+.hibackup-brand h1 small,
+.hibackup-brand h2 small {
 	font-size: 14px;
 	color: #94a3b8;
 	font-weight: 400;
 	margin-left: 6px;
+}
+
+/* Fix WordPress notices placement below header */
+.wp-header-end {
+	visibility: hidden;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	height: 0;
+	clear: both;
+}
+
+.hibackup-wrap > .notice,
+.hibackup-wrap > div.updated,
+.hibackup-wrap > div.error {
+	margin: 15px 0;
+	clear: both;
+	box-sizing: border-box;
+}
+
+.hibackup-header .notice,
+.hibackup-header div.updated,
+.hibackup-header div.error {
+	display: none !important;
 }
 
 /* Tabs */
