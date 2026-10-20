@@ -388,8 +388,13 @@ class HiBackup_Admin {
 							<td colspan="2" style="padding-top: 5px; padding-bottom: 12px;">
 								<details class="hibackup-guide-box">
 									<summary>
+										<span class="dashicons dashicons-arrow-right-alt2 hibackup-guide-arrow"></span>
 										<span class="dashicons dashicons-book-alt"></span>
-										<?php esc_html_e( '📖 Hướng dẫn chi tiết từng bước tạo Google Client ID & Client Secret (Mất 2 phút)', 'hibackup' ); ?>
+										<span><?php esc_html_e( 'Hướng dẫn chi tiết từng bước tạo Google Client ID & Client Secret (Mất 2 phút)', 'hibackup' ); ?></span>
+										<span class="hibackup-guide-action">
+											<span class="hibackup-guide-action-open"><?php esc_html_e( 'Bấm để mở', 'hibackup' ); ?></span>
+											<span class="hibackup-guide-action-close"><?php esc_html_e( 'Thu gọn', 'hibackup' ); ?></span>
+										</span>
 									</summary>
 									<div class="hibackup-guide-content">
 										<ol>
@@ -495,8 +500,13 @@ class HiBackup_Admin {
 							<td colspan="2" style="padding-top: 5px; padding-bottom: 12px;">
 								<details class="hibackup-guide-box">
 									<summary>
+										<span class="dashicons dashicons-arrow-right-alt2 hibackup-guide-arrow"></span>
 										<span class="dashicons dashicons-book-alt"></span>
-										<?php esc_html_e( '📖 Hướng dẫn tạo Service Account Key JSON (Dành cho Google Workspace)', 'hibackup' ); ?>
+										<span><?php esc_html_e( 'Hướng dẫn tạo Service Account Key JSON (Dành cho Google Workspace)', 'hibackup' ); ?></span>
+										<span class="hibackup-guide-action">
+											<span class="hibackup-guide-action-open"><?php esc_html_e( 'Bấm để mở', 'hibackup' ); ?></span>
+											<span class="hibackup-guide-action-close"><?php esc_html_e( 'Thu gọn', 'hibackup' ); ?></span>
+										</span>
 									</summary>
 									<div class="hibackup-guide-content">
 										<ol>
