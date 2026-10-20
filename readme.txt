@@ -4,7 +4,7 @@ Tags: backup, google drive, cloud backup, database backup, auto backup
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,11 @@ HiBackup là plugin sao lưu WordPress hiện đại, tự động nén toàn b�
 3. Truy cập menu 'HiBackup' trong trang quản trị để kết nối Google Drive và thiết lập lịch sao lưu.
 
 == Changelog ==
+
+= 1.0.1 =
+* Sửa lỗi: Hiển thị thông báo WordPress (admin notices) ngay ngắn dưới banner với mỏ neo chuẩn wp-header-end.
+* Giao diện: Thêm icon mũi tên xoay animation và nhãn trạng thái mở/đóng hướng dẫn cấu hình.
+* Tài liệu: Cập nhật hướng dẫn chi tiết theo giao diện mới của Google Cloud Console và bổ sung bước Test Users để tránh lỗi 403 access_denied.
 
 = 1.0.0 =
 * Phiên bản phát hành chính thức đầu tiên.

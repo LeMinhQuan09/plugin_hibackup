@@ -3,7 +3,7 @@
  * Plugin Name: HiBackup
  * Plugin URI: https://hiseo.vn
  * Description: Sao lưu toàn diện mã nguồn (source code) và cơ sở dữ liệu (database) WordPress tự động tải lên Google Drive và không lưu trữ trên hosting.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: hiseo
  * Author URI: https://hiseo.vn
  * Text Domain: hibackup
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Định nghĩa các hằng số cơ bản
-define( 'HIBACKUP_VERSION', '1.0.0' );
+define( 'HIBACKUP_VERSION', '1.0.1' );
 define( 'HIBACKUP_PLUGIN_FILE', __FILE__ );
 define( 'HIBACKUP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HIBACKUP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

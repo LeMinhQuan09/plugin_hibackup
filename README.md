@@ -2,7 +2,7 @@
 
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net)
-[![Version](https://img.shields.io/badge/Version-1.0.0-green.svg)](https://github.com/LeMinhQuan09/plugin_hibackup/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.1-green.svg)](https://github.com/LeMinhQuan09/plugin_hibackup/releases)
 [![Author](https://img.shields.io/badge/Author-hiseo-orange.svg)](https://hiseo.vn)
 [![License](https://img.shields.io/badge/License-GPLv2-lightgrey.svg)](LICENSE)
 
