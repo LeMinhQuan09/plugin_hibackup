@@ -35,25 +35,54 @@ class HiBackup_Admin {
 	}
 
 	/**
-	 * Đổi chữ "Visit plugin site" thành "View details" trong danh sách Plugins
+	 * Đảm bảo hiển thị tác giả "By hiseo" kèm link, và loại bỏ link "Visit plugin site" ban đầu
 	 */
 	public function custom_plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 		if ( plugin_basename( HIBACKUP_PLUGIN_FILE ) === $plugin_file ) {
-			$target_url = ! empty( $plugin_data['PluginURI'] ) ? $plugin_data['PluginURI'] : 'https://hiseo.vn';
-			foreach ( $plugin_meta as $key => $meta_link ) {
+			$author_url  = ! empty( $plugin_data['AuthorURI'] ) ? $plugin_data['AuthorURI'] : 'https://hiseo.vn';
+			$author_name = ! empty( $plugin_data['Author'] ) ? $plugin_data['Author'] : 'hiseo';
+
+			$new_meta   = array();
+			$has_author = false;
+
+			foreach ( $plugin_meta as $meta_link ) {
+				// Loại bỏ link "Visit plugin site" (hoặc link view details ban đầu dẫn về hiseo.vn)
 				if (
-					false !== strpos( $meta_link, $target_url ) ||
 					false !== stripos( $meta_link, 'Visit plugin site' ) ||
 					false !== stripos( $meta_link, 'trang của gói mở rộng' ) ||
-					false !== stripos( $meta_link, 'hiseo.vn' )
+					( false !== stripos( $meta_link, 'View details' ) && false !== strpos( $meta_link, 'hiseo.vn' ) )
 				) {
-					$plugin_meta[ $key ] = sprintf(
-						'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
-						esc_url( $target_url ),
-						esc_html__( 'View details', 'hibackup' )
-					);
+					continue;
 				}
+
+				// Giữ và chuẩn hóa mục Author "By hiseo"
+				if (
+					false !== stripos( $meta_link, 'By ' ) ||
+					false !== stripos( $meta_link, 'Bởi ' ) ||
+					false !== stripos( $meta_link, $author_name )
+				) {
+					$has_author = true;
+					$new_meta[] = sprintf(
+						/* translators: %s: Author link */
+						__( 'By %s', 'hibackup' ),
+						sprintf( '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', esc_url( $author_url ), esc_html( $author_name ) )
+					);
+					continue;
+				}
+
+				$new_meta[] = $meta_link;
 			}
+
+			// Nếu danh sách chưa có Author thì chèn ngay sau Version
+			if ( ! $has_author ) {
+				$author_item = sprintf(
+					__( 'By %s', 'hibackup' ),
+					sprintf( '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', esc_url( $author_url ), esc_html( $author_name ) )
+				);
+				array_splice( $new_meta, 1, 0, array( $author_item ) );
+			}
+
+			return $new_meta;
 		}
 		return $plugin_meta;
 	}
