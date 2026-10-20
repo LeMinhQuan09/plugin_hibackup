@@ -393,3 +393,59 @@
 	color: #cbd5e1;
 	margin-bottom: 10px;
 }
+
+/* Guide Box Collapsible */
+.hibackup-guide-box {
+	background: #f8fafc;
+	border: 1px solid #cbd5e1;
+	border-radius: 8px;
+	padding: 14px 18px;
+	margin: 5px 0 10px;
+	transition: all 0.2s ease;
+}
+
+.hibackup-guide-box[open] {
+	background: #f0f7ff;
+	border-color: #93c5fd;
+	box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+.hibackup-guide-box summary {
+	font-weight: 600;
+	color: #1a73e8;
+	cursor: pointer;
+	outline: none;
+	font-size: 14px;
+	user-select: none;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.hibackup-guide-box summary:hover {
+	color: #1557b0;
+}
+
+.hibackup-guide-box .hibackup-guide-content {
+	margin-top: 14px;
+	border-top: 1px dashed #bfdbfe;
+	padding-top: 12px;
+	color: #334155;
+	font-size: 13.5px;
+	line-height: 1.65;
+}
+
+.hibackup-guide-box ol {
+	margin: 0 0 0 22px;
+	padding: 0;
+}
+
+.hibackup-guide-box li {
+	margin-bottom: 8px;
+}
+
+.hibackup-guide-box ul {
+	margin: 6px 0 6px 20px;
+	list-style: disc;
+}
+

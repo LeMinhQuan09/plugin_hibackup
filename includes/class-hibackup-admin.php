@@ -385,6 +385,44 @@ class HiBackup_Admin {
 					<!-- Khối OAuth 2.0 -->
 					<tbody id="auth-section-oauth2" style="<?php echo 'oauth2' === $auth_type ? '' : 'display:none;'; ?>">
 						<tr>
+							<td colspan="2" style="padding-top: 5px; padding-bottom: 12px;">
+								<details class="hibackup-guide-box">
+									<summary>
+										<span class="dashicons dashicons-book-alt"></span>
+										<?php esc_html_e( '📖 Hướng dẫn chi tiết từng bước tạo Google Client ID & Client Secret (Mất 2 phút)', 'hibackup' ); ?>
+									</summary>
+									<div class="hibackup-guide-content">
+										<ol>
+											<li><strong>Bước 1:</strong> Truy cập <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer"><strong>Google Cloud Console</strong></a> và đăng nhập bằng tài khoản Gmail của bạn.</li>
+											<li><strong>Bước 2:</strong> Bấm vào danh sách Project ở góc trên cùng (bên cạnh logo Google Cloud) &gt; Bấm <strong>New Project</strong> &gt; Đặt tên (ví dụ: <em>HiBackup</em>) &gt; Bấm <strong>Create</strong>.</li>
+											<li><strong>Bước 3:</strong> Vào menu bên trái chọn <strong>APIs & Services &gt; Library</strong> &gt; Gõ tìm <code>Google Drive API</code> &gt; Nhấp vào và bấm nút <strong>Enable</strong>.</li>
+											<li><strong>Bước 4 (Cấu hình màn hình xác thực):</strong> Vào menu <strong>APIs & Services &gt; OAuth consent screen</strong>:
+												<ul>
+													<li>Chọn <strong>External</strong> &gt; Bấm <strong>Create</strong>.</li>
+													<li>Mục <em>App name</em> điền: <code>HiBackup</code>.</li>
+													<li>Mục <em>User support email</em> và <em>Developer contact email</em>: Điền chính email Gmail của bạn &gt; Bấm <strong>Save and Continue</strong>.</li>
+													<li>Mục <em>Scopes</em>: Bấm <strong>Save and Continue</strong>.</li>
+													<li>Mục <em>Test users</em> (Rất quan trọng): Bấm <strong>+ Add Users</strong> &gt; Nhập email Gmail của bạn vào &gt; Bấm <strong>Save and Continue</strong>.</li>
+												</ul>
+											</li>
+											<li><strong>Bước 5 (Tạo khóa kết nối):</strong> Vào menu <strong>APIs & Services &gt; Credentials</strong>:
+												<ul>
+													<li>Bấm <strong>+ Create Credentials</strong> ở trên cùng &gt; Chọn <strong>OAuth client ID</strong>.</li>
+													<li>Mục <em>Application type</em>: Chọn <strong>Web application</strong>.</li>
+													<li>Mục <em>Name</em>: Đặt tên tùy ý (ví dụ: <em>HiBackup Web</em>).</li>
+													<li>Mục <strong>Authorized redirect URIs</strong>: Bấm nút <strong>+ Add URI</strong> và copy chính xác đường link ở ô <code>URI chuyển hướng hợp lệ (Redirect URI)</code> ngay bên dưới dán vào.</li>
+													<li>Bấm <strong>Create</strong>. Google sẽ hiển thị một popup chứa <strong>Client ID</strong> và <strong>Client Secret</strong> của bạn!</li>
+												</ul>
+											</li>
+											<li><strong>Bước 6:</strong> Copy <strong>Client ID</strong> và <strong>Client Secret</strong> dán vào 2 ô bên dưới &gt; Bấm nút <strong>Lưu Cài đặt</strong>.</li>
+											<li><strong>Bước 7:</strong> Bấm nút <strong>"🔗 Đăng nhập &amp; Ủy quyền Google Drive (1-Click)"</strong> bên dưới để hoàn tất liên kết!</li>
+										</ol>
+									</div>
+								</details>
+							</td>
+						</tr>
+
+						<tr>
 							<th scope="row"><label><?php esc_html_e( 'URI chuyển hướng hợp lệ (Redirect URI)', 'hibackup' ); ?></label></th>
 							<td>
 								<?php $oauth_callback_url = admin_url( 'admin.php' ); ?>
@@ -453,6 +491,25 @@ class HiBackup_Admin {
 
 					<!-- Khối Service Account -->
 					<tbody id="auth-section-sa" style="<?php echo 'service_account' === $auth_type ? '' : 'display:none;'; ?>">
+						<tr>
+							<td colspan="2" style="padding-top: 5px; padding-bottom: 12px;">
+								<details class="hibackup-guide-box">
+									<summary>
+										<span class="dashicons dashicons-book-alt"></span>
+										<?php esc_html_e( '📖 Hướng dẫn tạo Service Account Key JSON (Dành cho Google Workspace)', 'hibackup' ); ?>
+									</summary>
+									<div class="hibackup-guide-content">
+										<ol>
+											<li><strong>Bước 1:</strong> Tại <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer"><strong>Google Cloud Console</strong></a>, vào menu <strong>APIs & Services &gt; Credentials</strong>.</li>
+											<li><strong>Bước 2:</strong> Bấm <strong>+ Create Credentials</strong> &gt; Chọn <strong>Service account</strong> &gt; Đặt tên tùy ý (ví dụ: <em>hibackup-sa</em>) &gt; Bấm <strong>Done</strong>.</li>
+											<li><strong>Bước 3:</strong> Nhấp vào Service Account vừa tạo &gt; Chọn tab <strong>Keys</strong> &gt; Bấm <strong>Add Key &gt; Create new key</strong> &gt; Chọn <strong>JSON</strong> &gt; Bấm <strong>Create</strong> để tải file key về máy.</li>
+											<li><strong>Bước 4:</strong> Mở file JSON tải về bằng Notepad, copy toàn bộ nội dung dán vào ô bên dưới.</li>
+											<li><strong>Bước 5 (Rất quan trọng):</strong> Mở Google Drive của bạn &gt; Tạo thư mục sao lưu &gt; Bấm <strong>Chia sẻ (Share)</strong> và dán địa chỉ email của Service Account (dạng <code>...iam.gserviceaccount.com</code>) với quyền <strong>Người chỉnh sửa (Editor)</strong>.</li>
+										</ol>
+									</div>
+								</details>
+							</td>
+						</tr>
 						<tr>
 							<th scope="row"><label for="gdrive_service_account_json"><?php esc_html_e( 'Service Account Key (JSON)', 'hibackup' ); ?></label></th>
 							<td>
