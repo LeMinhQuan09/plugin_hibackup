@@ -360,7 +360,10 @@ class HiBackup_Admin {
 									<span class="dashicons dashicons-admin-site-alt3"></span>
 								</div>
 								<div class="hibackup-mode-title-wrap">
-									<span class="hibackup-mode-title"><?php esc_html_e( 'Toàn bộ mã nguồn (Full Source)', 'hibackup' ); ?></span>
+									<span class="hibackup-mode-title">
+										<?php esc_html_e( 'Toàn bộ mã nguồn', 'hibackup' ); ?>
+										<span class="hibackup-mode-sub-title"><?php esc_html_e( '(Full Source)', 'hibackup' ); ?></span>
+									</span>
 								</div>
 								<div class="hibackup-mode-radio-wrap">
 									<input type="radio" name="run_source_mode" value="full" <?php checked( 'full', $run_mode ); ?>>
@@ -382,7 +385,10 @@ class HiBackup_Admin {
 									<span class="dashicons dashicons-admin-generic"></span>
 								</div>
 								<div class="hibackup-mode-title-wrap">
-									<span class="hibackup-mode-title"><?php esc_html_e( 'Tùy chỉnh từng phần (Custom)', 'hibackup' ); ?></span>
+									<span class="hibackup-mode-title">
+										<?php esc_html_e( 'Tùy chỉnh từng phần', 'hibackup' ); ?>
+										<span class="hibackup-mode-sub-title"><?php esc_html_e( '(Custom)', 'hibackup' ); ?></span>
+									</span>
 								</div>
 								<div class="hibackup-mode-radio-wrap">
 									<input type="radio" name="run_source_mode" value="custom" <?php checked( 'custom', $run_mode ); ?>>
@@ -728,7 +734,10 @@ class HiBackup_Admin {
 												<span class="dashicons dashicons-admin-site-alt3"></span>
 											</div>
 											<div class="hibackup-mode-title-wrap">
-												<span class="hibackup-mode-title"><?php esc_html_e( 'Toàn bộ mã nguồn (Full Source)', 'hibackup' ); ?></span>
+												<span class="hibackup-mode-title">
+													<?php esc_html_e( 'Toàn bộ mã nguồn', 'hibackup' ); ?>
+													<span class="hibackup-mode-sub-title"><?php esc_html_e( '(Full Source)', 'hibackup' ); ?></span>
+												</span>
 											</div>
 											<div class="hibackup-mode-radio-wrap">
 												<input type="radio" name="source_mode" value="full" <?php checked( 'full', $opt_mode ); ?>>
@@ -750,7 +759,10 @@ class HiBackup_Admin {
 												<span class="dashicons dashicons-admin-generic"></span>
 											</div>
 											<div class="hibackup-mode-title-wrap">
-												<span class="hibackup-mode-title"><?php esc_html_e( 'Tùy chỉnh từng phần (Custom)', 'hibackup' ); ?></span>
+												<span class="hibackup-mode-title">
+													<?php esc_html_e( 'Tùy chỉnh từng phần', 'hibackup' ); ?>
+													<span class="hibackup-mode-sub-title"><?php esc_html_e( '(Custom)', 'hibackup' ); ?></span>
+												</span>
 											</div>
 											<div class="hibackup-mode-radio-wrap">
 												<input type="radio" name="source_mode" value="custom" <?php checked( 'custom', $opt_mode ); ?>>

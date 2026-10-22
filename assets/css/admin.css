@@ -215,13 +215,80 @@ label.hibackup-choice-card {
 	line-height: 1.45;
 }
 
-.hibackup-choice-checkbox input[type="checkbox"] {
-	width: 20px !important;
-	height: 20px !important;
-	min-width: 20px !important;
+/* Perfect Centered Checkboxes */
+.hibackup-wrap input[type="checkbox"],
+.wp-core-ui .hibackup-wrap input[type="checkbox"] {
+	width: 18px !important;
+	height: 18px !important;
+	min-width: 18px !important;
+	border-radius: 4px !important;
+	position: relative !important;
 	margin: 0 !important;
-	cursor: pointer;
-	accent-color: #10b981;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	box-sizing: border-box !important;
+	line-height: 1 !important;
+	vertical-align: middle !important;
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	border: 1.5px solid #94a3b8 !important;
+	background: #ffffff !important;
+	cursor: pointer !important;
+	transition: all 0.15s ease !important;
+}
+
+.hibackup-wrap input[type="checkbox"]:hover,
+.wp-core-ui .hibackup-wrap input[type="checkbox"]:hover {
+	border-color: #2563eb !important;
+}
+
+.hibackup-wrap input[type="checkbox"]:checked,
+.wp-core-ui .hibackup-wrap input[type="checkbox"]:checked {
+	background: #2563eb !important;
+	border-color: #2563eb !important;
+}
+
+.hibackup-wrap .hibackup-choice-checkbox input[type="checkbox"]:checked {
+	background: #10b981 !important;
+	border-color: #10b981 !important;
+}
+
+.hibackup-wrap input[type="checkbox"]:checked::before,
+.wp-core-ui .hibackup-wrap input[type="checkbox"]:checked::before {
+	content: "" !important;
+	position: absolute !important;
+	top: 48% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) rotate(45deg) !important;
+	width: 4px !important;
+	height: 8px !important;
+	border: solid #ffffff !important;
+	border-width: 0 2px 2px 0 !important;
+	margin: 0 !important;
+	float: none !important;
+	display: block !important;
+}
+
+.hibackup-wrap input[type="checkbox"]:indeterminate,
+.wp-core-ui .hibackup-wrap input[type="checkbox"]:indeterminate {
+	background: #2563eb !important;
+	border-color: #2563eb !important;
+}
+
+.hibackup-wrap input[type="checkbox"]:indeterminate::before,
+.wp-core-ui .hibackup-wrap input[type="checkbox"]:indeterminate::before {
+	content: "" !important;
+	position: absolute !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+	width: 8px !important;
+	height: 2px !important;
+	background: #ffffff !important;
+	margin: 0 !important;
+	float: none !important;
+	display: block !important;
 }
 
 /* Icon Badges */
@@ -317,6 +384,15 @@ label.hibackup-mode-card {
 	font-size: 14.5px;
 	font-weight: 700;
 	color: #0f172a;
+	line-height: 1.3;
+}
+
+.hibackup-mode-sub-title {
+	display: block;
+	font-size: 12.5px;
+	font-weight: 600;
+	color: #64748b;
+	margin-top: 2px;
 }
 
 .hibackup-mode-radio-wrap {
