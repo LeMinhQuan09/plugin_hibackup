@@ -339,7 +339,6 @@ class HiBackup_Admin {
 							<div class="hibackup-choice-text">
 								<div class="hibackup-choice-title">
 									<strong><?php esc_html_e( 'Cơ sở dữ liệu (Database SQL)', 'hibackup' ); ?></strong>
-									<span class="hibackup-pill-badge hibackup-pill-db"><?php esc_html_e( 'Quan trọng nhất', 'hibackup' ); ?></span>
 								</div>
 								<span class="hibackup-choice-sub"><?php esc_html_e( 'Trích xuất toàn bộ dữ liệu bài viết, trang, tài khoản người dùng, đơn hàng và cấu hình hệ thống.', 'hibackup' ); ?></span>
 							</div>
@@ -362,7 +361,6 @@ class HiBackup_Admin {
 								</div>
 								<div class="hibackup-mode-title-wrap">
 									<span class="hibackup-mode-title"><?php esc_html_e( 'Toàn bộ mã nguồn (Full Source)', 'hibackup' ); ?></span>
-									<span class="hibackup-pill-badge hibackup-pill-recommended"><?php esc_html_e( 'Khuyên dùng', 'hibackup' ); ?></span>
 								</div>
 								<div class="hibackup-mode-radio-wrap">
 									<input type="radio" name="run_source_mode" value="full" <?php checked( 'full', $run_mode ); ?>>
@@ -385,7 +383,6 @@ class HiBackup_Admin {
 								</div>
 								<div class="hibackup-mode-title-wrap">
 									<span class="hibackup-mode-title"><?php esc_html_e( 'Tùy chỉnh từng phần (Custom)', 'hibackup' ); ?></span>
-									<span class="hibackup-pill-badge"><?php esc_html_e( 'Linh hoạt', 'hibackup' ); ?></span>
 								</div>
 								<div class="hibackup-mode-radio-wrap">
 									<input type="radio" name="run_source_mode" value="custom" <?php checked( 'custom', $run_mode ); ?>>
@@ -710,7 +707,6 @@ class HiBackup_Admin {
 										<div class="hibackup-choice-text">
 											<div class="hibackup-choice-title">
 												<strong><?php esc_html_e( 'Cơ sở dữ liệu (Database SQL)', 'hibackup' ); ?></strong>
-												<span class="hibackup-pill-badge hibackup-pill-db"><?php esc_html_e( 'Quan trọng nhất', 'hibackup' ); ?></span>
 											</div>
 											<span class="hibackup-choice-sub"><?php esc_html_e( 'Trích xuất toàn bộ dữ liệu bài viết, trang, tài khoản người dùng, đơn hàng và cấu hình hệ thống.', 'hibackup' ); ?></span>
 										</div>
@@ -733,7 +729,6 @@ class HiBackup_Admin {
 											</div>
 											<div class="hibackup-mode-title-wrap">
 												<span class="hibackup-mode-title"><?php esc_html_e( 'Toàn bộ mã nguồn (Full Source)', 'hibackup' ); ?></span>
-												<span class="hibackup-pill-badge hibackup-pill-recommended"><?php esc_html_e( 'Khuyên dùng', 'hibackup' ); ?></span>
 											</div>
 											<div class="hibackup-mode-radio-wrap">
 												<input type="radio" name="source_mode" value="full" <?php checked( 'full', $opt_mode ); ?>>
@@ -756,7 +751,6 @@ class HiBackup_Admin {
 											</div>
 											<div class="hibackup-mode-title-wrap">
 												<span class="hibackup-mode-title"><?php esc_html_e( 'Tùy chỉnh từng phần (Custom)', 'hibackup' ); ?></span>
-												<span class="hibackup-pill-badge"><?php esc_html_e( 'Linh hoạt', 'hibackup' ); ?></span>
 											</div>
 											<div class="hibackup-mode-radio-wrap">
 												<input type="radio" name="source_mode" value="custom" <?php checked( 'custom', $opt_mode ); ?>>
