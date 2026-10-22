@@ -71,6 +71,16 @@
 			var $percentage = $('#hibackup-progress-percentage');
 			var $console = $('#hibackup-log-console');
 
+			var sourceMode = $('input[name="run_source_mode"]:checked').val() || 'full';
+			var isFullSource = (sourceMode === 'full') ? 1 : 0;
+			var hasDb = $('#run_include_db').is(':checked');
+			var hasFiles = isFullSource || $('#hibackup-custom-drawer-run .run-sub-cb:checked').length > 0;
+
+			if (!hasDb && !hasFiles) {
+				alert('Vui lòng chọn ít nhất Cơ sở dữ liệu (Database) hoặc một thư mục mã nguồn để sao lưu!');
+				return;
+			}
+
 			$btn.prop('disabled', true);
 			$progressBox.slideDown();
 			$console.html('');
@@ -101,23 +111,21 @@
 				}
 			}, 1500);
 
-				var isFullSource = $('#run_include_full_source').is(':checked') ? 1 : 0;
-
-				$.ajax({
-					url: hibackupData.ajaxUrl,
-					type: 'POST',
-					timeout: 600000, // 10 phút
-					data: {
-						action: 'hibackup_run_backup',
-						nonce: hibackupData.nonce,
-						include_db: $('#run_include_db').is(':checked') ? 1 : 0,
-						include_full_source: isFullSource,
-						include_plugins: isFullSource || $('#run_include_plugins').is(':checked') ? 1 : 0,
-						include_themes: isFullSource || $('#run_include_themes').is(':checked') ? 1 : 0,
-						include_uploads: isFullSource || $('#run_include_uploads').is(':checked') ? 1 : 0,
-						include_config: isFullSource || $('#run_include_config').is(':checked') ? 1 : 0,
-						include_core: isFullSource || $('#run_include_core').is(':checked') ? 1 : 0,
-					},
+			$.ajax({
+				url: hibackupData.ajaxUrl,
+				type: 'POST',
+				timeout: 600000, // 10 phút
+				data: {
+					action: 'hibackup_run_backup',
+					nonce: hibackupData.nonce,
+					include_db: hasDb ? 1 : 0,
+					include_full_source: isFullSource,
+					include_plugins: isFullSource ? 1 : ($('#run_include_plugins').is(':checked') ? 1 : 0),
+					include_themes: isFullSource ? 1 : ($('#run_include_themes').is(':checked') ? 1 : 0),
+					include_uploads: isFullSource ? 1 : ($('#run_include_uploads').is(':checked') ? 1 : 0),
+					include_config: isFullSource ? 1 : ($('#run_include_config').is(':checked') ? 1 : 0),
+					include_core: isFullSource ? 1 : ($('#run_include_core').is(':checked') ? 1 : 0),
+				},
 				success: function (response) {
 					clearInterval(timer);
 					$btn.prop('disabled', false);
@@ -188,128 +196,84 @@
 			});
 		});
 
-		// 5. Quản lý phân cấp & Chọn tất cả (Tab Cấu hình chung)
-		function syncFullSourceOptions() {
-			var isFull = $('#backup_full_source').is(':checked');
-			var $subBox = $('#hibackup-sub-components-options');
-			var $subCbs = $subBox.find('.hibackup-sub-cb');
-
-			if (isFull) {
-				$subBox.addClass('is-disabled');
-				$subBox.find('.hibackup-sub-hint-text').hide();
-				$subBox.find('.hibackup-included-badge').show();
-				$subCbs.prop('disabled', true);
+		// 5. Quản lý Chế độ Sao lưu (Tab Cấu hình chung)
+		$('input[name="source_mode"]').on('change', function () {
+			var mode = $(this).val();
+			if (mode === 'full') {
+				$('#card_options_mode_full').addClass('is-selected');
+				$('#card_options_mode_custom').removeClass('is-selected');
+				$('#hibackup-custom-drawer-options').slideUp(200);
 			} else {
-				$subBox.removeClass('is-disabled');
-				$subBox.find('.hibackup-sub-hint-text').show();
-				$subBox.find('.hibackup-included-badge').hide();
-				$subCbs.prop('disabled', false);
+				$('#card_options_mode_custom').addClass('is-selected');
+				$('#card_options_mode_full').removeClass('is-selected');
+				$('#hibackup-custom-drawer-options').slideDown(200);
 			}
-		}
+		});
 
-		function syncOptionsSelectAll() {
-			var dbChecked = $('input[name="backup_db"]').is(':checked');
-			var fullChecked = $('#backup_full_source').is(':checked');
-			var $subCbs = $('#hibackup-sub-components-options .hibackup-sub-cb');
-			var subCheckedCount = $subCbs.filter(':checked').length;
-			var $toggle = $('#hibackup_toggle_all_options');
+		function syncOptionsSubSelectAll() {
+			var $subCbs = $('#hibackup-custom-drawer-options .options-sub-cb');
+			var total = $subCbs.length;
+			var checked = $subCbs.filter(':checked').length;
+			var $toggle = $('#options_toggle_sub_components');
 
-			var isAll = dbChecked && (fullChecked || subCheckedCount === $subCbs.length);
-			var isNone = !dbChecked && !fullChecked && subCheckedCount === 0;
-
-			if (isAll) {
+			if (checked === total) {
 				$toggle.prop('checked', true).prop('indeterminate', false);
-			} else if (isNone) {
+			} else if (checked === 0) {
 				$toggle.prop('checked', false).prop('indeterminate', false);
 			} else {
 				$toggle.prop('checked', false).prop('indeterminate', true);
 			}
 		}
 
-		$('#backup_full_source').on('change', function () {
-			syncFullSourceOptions();
-			syncOptionsSelectAll();
-		});
-
-		$('input[name="backup_db"], .hibackup-sub-cb').on('change', function () {
-			syncOptionsSelectAll();
-		});
-
-		$('#hibackup_toggle_all_options').on('change', function () {
+		$('#options_toggle_sub_components').on('change', function () {
 			var isChecked = $(this).is(':checked');
-			$('input[name="backup_db"]').prop('checked', isChecked);
-			$('#backup_full_source').prop('checked', isChecked);
-			if (isChecked) {
-				$('.hibackup-sub-cb').prop('checked', true);
-			} else {
-				$('.hibackup-sub-cb').prop('checked', false);
-			}
-			syncFullSourceOptions();
+			$('#hibackup-custom-drawer-options .options-sub-cb').prop('checked', isChecked);
 		});
 
-		syncFullSourceOptions();
-		syncOptionsSelectAll();
+		$('#hibackup-custom-drawer-options .options-sub-cb').on('change', function () {
+			syncOptionsSubSelectAll();
+		});
 
-		// 6. Quản lý phân cấp & Chọn tất cả (Tab Sao lưu ngay)
-		function syncFullSourceRun() {
-			var isFull = $('#run_include_full_source').is(':checked');
-			var $subBox = $('#hibackup-sub-components-run');
-			var $subCbs = $subBox.find('.run-sub-cb');
+		syncOptionsSubSelectAll();
 
-			if (isFull) {
-				$subBox.addClass('is-disabled');
-				$subBox.find('.hibackup-sub-hint-text').hide();
-				$subBox.find('.hibackup-included-badge').show();
-				$subCbs.prop('disabled', true);
+		// 6. Quản lý Chế độ Sao lưu (Tab Sao lưu ngay)
+		$('input[name="run_source_mode"]').on('change', function () {
+			var mode = $(this).val();
+			if (mode === 'full') {
+				$('#card_run_mode_full').addClass('is-selected');
+				$('#card_run_mode_custom').removeClass('is-selected');
+				$('#hibackup-custom-drawer-run').slideUp(200);
 			} else {
-				$subBox.removeClass('is-disabled');
-				$subBox.find('.hibackup-sub-hint-text').show();
-				$subBox.find('.hibackup-included-badge').hide();
-				$subCbs.prop('disabled', false);
+				$('#card_run_mode_custom').addClass('is-selected');
+				$('#card_run_mode_full').removeClass('is-selected');
+				$('#hibackup-custom-drawer-run').slideDown(200);
 			}
-		}
+		});
 
-		function syncBackupNowSelectAll() {
-			var dbChecked = $('#run_include_db').is(':checked');
-			var fullChecked = $('#run_include_full_source').is(':checked');
-			var $subCbs = $('#hibackup-sub-components-run .run-sub-cb');
-			var subCheckedCount = $subCbs.filter(':checked').length;
-			var $toggle = $('#run_toggle_all_components');
+		function syncRunSubSelectAll() {
+			var $subCbs = $('#hibackup-custom-drawer-run .run-sub-cb');
+			var total = $subCbs.length;
+			var checked = $subCbs.filter(':checked').length;
+			var $toggle = $('#run_toggle_sub_components');
 
-			var isAll = dbChecked && (fullChecked || subCheckedCount === $subCbs.length);
-			var isNone = !dbChecked && !fullChecked && subCheckedCount === 0;
-
-			if (isAll) {
+			if (checked === total) {
 				$toggle.prop('checked', true).prop('indeterminate', false);
-			} else if (isNone) {
+			} else if (checked === 0) {
 				$toggle.prop('checked', false).prop('indeterminate', false);
 			} else {
 				$toggle.prop('checked', false).prop('indeterminate', true);
 			}
 		}
 
-		$('#run_include_full_source').on('change', function () {
-			syncFullSourceRun();
-			syncBackupNowSelectAll();
-		});
-
-		$('#run_include_db, .run-sub-cb').on('change', function () {
-			syncBackupNowSelectAll();
-		});
-
-		$('#run_toggle_all_components').on('change', function () {
+		$('#run_toggle_sub_components').on('change', function () {
 			var isChecked = $(this).is(':checked');
-			$('#run_include_db').prop('checked', isChecked);
-			$('#run_include_full_source').prop('checked', isChecked);
-			if (isChecked) {
-				$('.run-sub-cb').prop('checked', true);
-			} else {
-				$('.run-sub-cb').prop('checked', false);
-			}
-			syncFullSourceRun();
+			$('#hibackup-custom-drawer-run .run-sub-cb').prop('checked', isChecked);
 		});
 
-		syncFullSourceRun();
-		syncBackupNowSelectAll();
+		$('#hibackup-custom-drawer-run .run-sub-cb').on('change', function () {
+			syncRunSubSelectAll();
+		});
+
+		syncRunSubSelectAll();
 	});
 })(jQuery);

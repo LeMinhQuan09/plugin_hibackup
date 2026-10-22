@@ -82,6 +82,18 @@ Trong phiên làm việc này, toàn bộ quy trình hoàn thiện UI/UX, sửa 
   - Quy ước đặt tên file chuẩn `bk_[site]_full_[date].zip` và ghi lịch sử `Full (Full Source + DB)`.
 - **Nâng cấp phiên bản:** Phát hành **`v1.1.0`** (Minor Release).
 
+### 2.9. Tinh chỉnh Trực quan Lựa chọn Thành phần theo Chế độ Radio (Cách 2)
+- **Vấn đề giải quyết:** Người dùng cảm thấy bối rối và cấn cấn khi hiển thị cùng lúc checkbox "Toàn bộ mã nguồn" bên cạnh các checkbox con (Plugins, Themes, Uploads...) trong cùng một danh sách.
+- **Giải pháp Cách 2 (Tách biệt rõ ràng Cơ sở dữ liệu và 2 Chế độ Mã nguồn):**
+  1. **Cơ sở dữ liệu (Database):** Checkbox độc lập `[x] Database (Cơ sở dữ liệu SQL)`.
+  2. **Mã nguồn & Tệp tin:** Sử dụng Radio Card chuyển đổi rõ ràng 2 chế độ:
+     - 🔘 **Toàn bộ mã nguồn (Full Source):** Nén 100% website gốc. Khi chọn, danh sách thư mục con sẽ tự động thu gọn/ẩn hoàn toàn.
+     - 🔘 **Tùy chỉnh từng phần (Custom):** Hiệu ứng trượt mở ngăn kéo (`drawer`) cho phép chọn riêng lẻ: Plugins, Themes, Uploads, wp-config.php, WP Core.
+  3. **Đồng bộ hóa 2 Tab:**
+     - Tab **Sao lưu ngay**: hỗ trợ chọn tức thời chế độ `run_source_mode` trước khi bấm nút sao lưu.
+     - Tab **Tùy chọn & Lịch trình**: lưu cấu hình `source_mode` làm mặc định cho các phiên backup tự động Cron.
+     - Bổ sung nút "Chọn tất cả" bên trong ngăn kéo Custom của từng tab.
+
 ---
 
 ## 3. CẤU TRÚC FILE QUAN TRỌNG
