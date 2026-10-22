@@ -101,21 +101,23 @@
 				}
 			}, 1500);
 
-			$.ajax({
-				url: hibackupData.ajaxUrl,
-				type: 'POST',
-				timeout: 600000, // 10 phút
-				data: {
-					action: 'hibackup_run_backup',
-					nonce: hibackupData.nonce,
-					include_db: $('#run_include_db').is(':checked') ? 1 : 0,
-					include_full_source: $('#run_include_full_source').is(':checked') ? 1 : 0,
-					include_plugins: $('#run_include_plugins').is(':checked') ? 1 : 0,
-					include_themes: $('#run_include_themes').is(':checked') ? 1 : 0,
-					include_uploads: $('#run_include_uploads').is(':checked') ? 1 : 0,
-					include_config: $('#run_include_config').is(':checked') ? 1 : 0,
-					include_core: $('#run_include_core').is(':checked') ? 1 : 0,
-				},
+				var isFullSource = $('#run_include_full_source').is(':checked') ? 1 : 0;
+
+				$.ajax({
+					url: hibackupData.ajaxUrl,
+					type: 'POST',
+					timeout: 600000, // 10 phút
+					data: {
+						action: 'hibackup_run_backup',
+						nonce: hibackupData.nonce,
+						include_db: $('#run_include_db').is(':checked') ? 1 : 0,
+						include_full_source: isFullSource,
+						include_plugins: isFullSource || $('#run_include_plugins').is(':checked') ? 1 : 0,
+						include_themes: isFullSource || $('#run_include_themes').is(':checked') ? 1 : 0,
+						include_uploads: isFullSource || $('#run_include_uploads').is(':checked') ? 1 : 0,
+						include_config: isFullSource || $('#run_include_config').is(':checked') ? 1 : 0,
+						include_core: isFullSource || $('#run_include_core').is(':checked') ? 1 : 0,
+					},
 				success: function (response) {
 					clearInterval(timer);
 					$btn.prop('disabled', false);
@@ -186,86 +188,128 @@
 			});
 		});
 
-		// 5. Chọn / Bỏ chọn Tất cả thành phần mặc định (Tab Tùy chọn)
+		// 5. Quản lý phân cấp & Chọn tất cả (Tab Cấu hình chung)
+		function syncFullSourceOptions() {
+			var isFull = $('#backup_full_source').is(':checked');
+			var $subBox = $('#hibackup-sub-components-options');
+			var $subCbs = $subBox.find('.hibackup-sub-cb');
+
+			if (isFull) {
+				$subBox.addClass('is-disabled');
+				$subBox.find('.hibackup-sub-hint-text').hide();
+				$subBox.find('.hibackup-included-badge').show();
+				$subCbs.prop('disabled', true);
+			} else {
+				$subBox.removeClass('is-disabled');
+				$subBox.find('.hibackup-sub-hint-text').show();
+				$subBox.find('.hibackup-included-badge').hide();
+				$subCbs.prop('disabled', false);
+			}
+		}
+
 		function syncOptionsSelectAll() {
-			var $items = $('.hibackup-component-cb');
-			if (!$items.length) return;
-			var total = $items.length;
-			var checked = $items.filter(':checked').length;
+			var dbChecked = $('input[name="backup_db"]').is(':checked');
+			var fullChecked = $('#backup_full_source').is(':checked');
+			var $subCbs = $('#hibackup-sub-components-options .hibackup-sub-cb');
+			var subCheckedCount = $subCbs.filter(':checked').length;
 			var $toggle = $('#hibackup_toggle_all_options');
 
-			if (checked === total) {
+			var isAll = dbChecked && (fullChecked || subCheckedCount === $subCbs.length);
+			var isNone = !dbChecked && !fullChecked && subCheckedCount === 0;
+
+			if (isAll) {
 				$toggle.prop('checked', true).prop('indeterminate', false);
-			} else if (checked === 0) {
+			} else if (isNone) {
 				$toggle.prop('checked', false).prop('indeterminate', false);
 			} else {
 				$toggle.prop('checked', false).prop('indeterminate', true);
 			}
 		}
 
-		// Khi chọn Full Source ở Cấu hình, tự động tích chọn các thành phần con
 		$('#backup_full_source').on('change', function () {
-			if ($(this).is(':checked')) {
-				$('input[name="backup_plugins"], input[name="backup_themes"], input[name="backup_uploads"], input[name="backup_config"], input[name="backup_core"]').prop('checked', true);
-			}
+			syncFullSourceOptions();
+			syncOptionsSelectAll();
 		});
 
-		$('input[name="backup_plugins"], input[name="backup_themes"], input[name="backup_uploads"], input[name="backup_config"], input[name="backup_core"]').on('change', function () {
-			if (!$(this).is(':checked')) {
-				$('#backup_full_source').prop('checked', false);
-			}
+		$('input[name="backup_db"], .hibackup-sub-cb').on('change', function () {
+			syncOptionsSelectAll();
 		});
 
 		$('#hibackup_toggle_all_options').on('change', function () {
 			var isChecked = $(this).is(':checked');
-			$('.hibackup-component-cb').prop('checked', isChecked);
+			$('input[name="backup_db"]').prop('checked', isChecked);
+			$('#backup_full_source').prop('checked', isChecked);
+			if (isChecked) {
+				$('.hibackup-sub-cb').prop('checked', true);
+			} else {
+				$('.hibackup-sub-cb').prop('checked', false);
+			}
+			syncFullSourceOptions();
 		});
 
-		$('.hibackup-component-cb').on('change', function () {
-			syncOptionsSelectAll();
-		});
-
+		syncFullSourceOptions();
 		syncOptionsSelectAll();
 
-		// 6. Chọn / Bỏ chọn Tất cả thành phần (Tab Sao lưu ngay)
+		// 6. Quản lý phân cấp & Chọn tất cả (Tab Sao lưu ngay)
+		function syncFullSourceRun() {
+			var isFull = $('#run_include_full_source').is(':checked');
+			var $subBox = $('#hibackup-sub-components-run');
+			var $subCbs = $subBox.find('.run-sub-cb');
+
+			if (isFull) {
+				$subBox.addClass('is-disabled');
+				$subBox.find('.hibackup-sub-hint-text').hide();
+				$subBox.find('.hibackup-included-badge').show();
+				$subCbs.prop('disabled', true);
+			} else {
+				$subBox.removeClass('is-disabled');
+				$subBox.find('.hibackup-sub-hint-text').show();
+				$subBox.find('.hibackup-included-badge').hide();
+				$subCbs.prop('disabled', false);
+			}
+		}
+
 		function syncBackupNowSelectAll() {
-			var $items = $('.run-component-cb');
-			if (!$items.length) return;
-			var total = $items.length;
-			var checked = $items.filter(':checked').length;
+			var dbChecked = $('#run_include_db').is(':checked');
+			var fullChecked = $('#run_include_full_source').is(':checked');
+			var $subCbs = $('#hibackup-sub-components-run .run-sub-cb');
+			var subCheckedCount = $subCbs.filter(':checked').length;
 			var $toggle = $('#run_toggle_all_components');
 
-			if (checked === total) {
+			var isAll = dbChecked && (fullChecked || subCheckedCount === $subCbs.length);
+			var isNone = !dbChecked && !fullChecked && subCheckedCount === 0;
+
+			if (isAll) {
 				$toggle.prop('checked', true).prop('indeterminate', false);
-			} else if (checked === 0) {
+			} else if (isNone) {
 				$toggle.prop('checked', false).prop('indeterminate', false);
 			} else {
 				$toggle.prop('checked', false).prop('indeterminate', true);
 			}
 		}
 
-		// Khi chọn Full Source ở Sao lưu ngay, tự động tích chọn các thành phần con
 		$('#run_include_full_source').on('change', function () {
-			if ($(this).is(':checked')) {
-				$('#run_include_plugins, #run_include_themes, #run_include_uploads, #run_include_config, #run_include_core').prop('checked', true);
-			}
+			syncFullSourceRun();
+			syncBackupNowSelectAll();
 		});
 
-		$('#run_include_plugins, #run_include_themes, #run_include_uploads, #run_include_config, #run_include_core').on('change', function () {
-			if (!$(this).is(':checked')) {
-				$('#run_include_full_source').prop('checked', false);
-			}
+		$('#run_include_db, .run-sub-cb').on('change', function () {
+			syncBackupNowSelectAll();
 		});
 
 		$('#run_toggle_all_components').on('change', function () {
 			var isChecked = $(this).is(':checked');
-			$('.run-component-cb').prop('checked', isChecked);
+			$('#run_include_db').prop('checked', isChecked);
+			$('#run_include_full_source').prop('checked', isChecked);
+			if (isChecked) {
+				$('.run-sub-cb').prop('checked', true);
+			} else {
+				$('.run-sub-cb').prop('checked', false);
+			}
+			syncFullSourceRun();
 		});
 
-		$('.run-component-cb').on('change', function () {
-			syncBackupNowSelectAll();
-		});
-
+		syncFullSourceRun();
 		syncBackupNowSelectAll();
 	});
 })(jQuery);

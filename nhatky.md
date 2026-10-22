@@ -71,10 +71,12 @@ Trong phiên làm việc này, toàn bộ quy trình hoàn thiện UI/UX, sửa 
   - Hỗ trợ trường hợp bảo mật khi `wp-config.php` nằm ngoài thư mục `ABSPATH`.
   - Tối ưu bộ lọc loại trừ (`exclude_patterns`): tự động bỏ qua `hibackup-temp`, `cache`, `wp-content/updraft`, `wp-content/backups`, `.git`, `node_modules`, `error_log`...
   - Kiểm tra tuyệt đối chống loop đệ quy nén chính file ZIP đang ghi hoặc file dump SQL.
-- **Đồng bộ Giao diện & Trải nghiệm (UI/UX):**
-  - Bổ sung checkbox `Toàn bộ mã nguồn (Full Source)` ở cả tab **Sao lưu ngay** và tab **Cấu hình chung** (Thành phần mặc định).
-  - Tự động tích hợp với nút "Tất cả": khi bấm chọn Tất cả sẽ chọn cả Full Source.
-  - Viết logic thông minh: khi tích chọn Full Source sẽ tự động chọn các thành phần con (`Plugins`, `Themes`, `Uploads`, `Config`, `Core`); nếu bỏ chọn một thành phần con thì tự động hủy Full Source (chuyển sang chế độ tùy chỉnh).
+- **Đồng bộ Giao diện & Trải nghiệm Phân cấp Cha - Con (UI/UX):**
+  - Tách bạch cấu trúc: `Database` và `Toàn bộ mã nguồn (Full Source)` là 2 lựa chọn cấp 1 độc lập.
+  - Các thành phần con (`Plugins`, `Themes`, `Uploads`, `Config`, `Core`) được gom vào khối nhánh phụ bên dưới.
+  - Khi tick chọn **"Toàn bộ mã nguồn (Full Source)"**: Toàn bộ khối thành phần con sẽ tự động làm mờ (`opacity: 0.55`, `disabled`) và hiển thị nhãn xanh **`✓ Đã bao gồm trong Full Source`**, giải quyết triệt để cảm giác trùng lặp, thừa thãi khi tick cả cha lẫn con.
+  - Khi bỏ tick "Toàn bộ mã nguồn": Khối thành phần con lập tức sáng lên cho phép người dùng tùy chọn từng phần riêng lẻ.
+  - Nút **"Tất cả (Chọn / Bỏ chọn toàn bộ)"** thông minh: khi bấm chọn Tất cả sẽ chọn Database + Full Source và tự động khóa mờ các mục con.
 - **Lập lịch Cron & Đặt tên:**
   - Hỗ trợ lưu trữ cấu hình `backup_full_source` trong cron tự động hàng ngày/hàng tuần.
   - Quy ước đặt tên file chuẩn `bk_[site]_full_[date].zip` và ghi lịch sử `Full (Full Source + DB)`.

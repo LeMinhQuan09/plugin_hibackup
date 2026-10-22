@@ -151,11 +151,19 @@ class HiBackup_Admin {
 		} elseif ( 'options' === $active_tab ) {
 			$current['backup_db']          = ! empty( $_POST['backup_db'] ) ? 1 : 0;
 			$current['backup_full_source'] = ! empty( $_POST['backup_full_source'] ) ? 1 : 0;
-			$current['backup_plugins']     = ! empty( $_POST['backup_plugins'] ) ? 1 : 0;
-			$current['backup_themes']     = ! empty( $_POST['backup_themes'] ) ? 1 : 0;
-			$current['backup_uploads']    = ! empty( $_POST['backup_uploads'] ) ? 1 : 0;
-			$current['backup_config']     = ! empty( $_POST['backup_config'] ) ? 1 : 0;
-			$current['backup_core']       = ! empty( $_POST['backup_core'] ) ? 1 : 0;
+			if ( ! empty( $current['backup_full_source'] ) ) {
+				$current['backup_plugins'] = 1;
+				$current['backup_themes']  = 1;
+				$current['backup_uploads'] = 1;
+				$current['backup_config']  = 1;
+				$current['backup_core']    = 1;
+			} else {
+				$current['backup_plugins'] = ! empty( $_POST['backup_plugins'] ) ? 1 : 0;
+				$current['backup_themes']  = ! empty( $_POST['backup_themes'] ) ? 1 : 0;
+				$current['backup_uploads'] = ! empty( $_POST['backup_uploads'] ) ? 1 : 0;
+				$current['backup_config']  = ! empty( $_POST['backup_config'] ) ? 1 : 0;
+				$current['backup_core']    = ! empty( $_POST['backup_core'] ) ? 1 : 0;
+			}
 			$current['auto_delete_local'] = 1;
 
 			$frequency = sanitize_text_field( wp_unslash( $_POST['cron_frequency'] ?? 'none' ) );
@@ -316,17 +324,36 @@ class HiBackup_Admin {
 
 			<div class="hibackup-backup-options-preview">
 				<h3><?php esc_html_e( 'Thành phần sẽ sao lưu:', 'hibackup' ); ?></h3>
-				<div class="hibackup-checkbox-grid">
-					<label style="grid-column: 1 / -1; padding-bottom: 8px; border-bottom: 1px dashed #dcdcde; margin-bottom: 4px; font-weight: 600;">
+				<div class="hibackup-options-container">
+					<label style="font-weight: 600; padding-bottom: 8px; border-bottom: 1px dashed #dcdcde; margin-bottom: 12px; display: block;">
 						<input type="checkbox" id="run_toggle_all_components"> <?php esc_html_e( 'Tất cả (Chọn / Bỏ chọn toàn bộ)', 'hibackup' ); ?>
 					</label>
-					<label><input type="checkbox" class="run-component-cb" id="run_include_db" value="1" <?php checked( ! empty( $settings['backup_db'] ) ); ?>> <strong>Database (Cơ sở dữ liệu SQL)</strong></label>
-					<label><input type="checkbox" class="run-component-cb" id="run_include_full_source" value="1" <?php checked( ! empty( $settings['backup_full_source'] ) ); ?>> <strong>Toàn bộ mã nguồn (Full Source)</strong></label>
-					<label><input type="checkbox" class="run-component-cb" id="run_include_plugins" value="1" <?php checked( ! empty( $settings['backup_plugins'] ) ); ?>> Plugins (Thư mục plugin)</label>
-					<label><input type="checkbox" class="run-component-cb" id="run_include_themes" value="1" <?php checked( ! empty( $settings['backup_themes'] ) ); ?>> Themes (Giao diện)</label>
-					<label><input type="checkbox" class="run-component-cb" id="run_include_uploads" value="1" <?php checked( ! empty( $settings['backup_uploads'] ) ); ?>> Uploads (Ảnh và tệp tải lên)</label>
-					<label><input type="checkbox" class="run-component-cb" id="run_include_config" value="1" <?php checked( ! empty( $settings['backup_config'] ) ); ?>> File wp-config.php</label>
-					<label><input type="checkbox" class="run-component-cb" id="run_include_core" value="1" <?php checked( ! empty( $settings['backup_core'] ) ); ?>> Core WP (wp-admin, wp-includes)</label>
+
+					<div class="hibackup-primary-choices">
+						<label class="hibackup-choice-card">
+							<input type="checkbox" class="run-component-cb" id="run_include_db" value="1" <?php checked( ! empty( $settings['backup_db'] ) ); ?>> 
+							<span><strong>Database (Cơ sở dữ liệu SQL)</strong></span>
+						</label>
+						<label class="hibackup-choice-card">
+							<input type="checkbox" class="run-component-cb" id="run_include_full_source" value="1" <?php checked( ! empty( $settings['backup_full_source'] ) ); ?>> 
+							<span><strong>Toàn bộ mã nguồn (Full Source)</strong></span>
+						</label>
+					</div>
+
+					<div id="hibackup-sub-components-run" class="hibackup-sub-components-box <?php echo ! empty( $settings['backup_full_source'] ) ? 'is-disabled' : ''; ?>">
+						<div class="hibackup-sub-hint">
+							<span class="dashicons dashicons-arrow-right-alt"></span>
+							<span class="hibackup-sub-hint-text" style="<?php echo ! empty( $settings['backup_full_source'] ) ? 'display:none;' : ''; ?>"><?php esc_html_e( 'Tùy chọn từng thành phần riêng lẻ (khi không chọn Full Source):', 'hibackup' ); ?></span>
+							<span class="hibackup-included-badge" style="<?php echo ! empty( $settings['backup_full_source'] ) ? '' : 'display:none;'; ?>"><?php esc_html_e( '✓ Đã bao gồm trong Full Source', 'hibackup' ); ?></span>
+						</div>
+						<div class="hibackup-sub-items">
+							<label><input type="checkbox" class="run-component-cb run-sub-cb" id="run_include_plugins" value="1" <?php checked( ! empty( $settings['backup_plugins'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> Plugins (Thư mục plugin)</label>
+							<label><input type="checkbox" class="run-component-cb run-sub-cb" id="run_include_themes" value="1" <?php checked( ! empty( $settings['backup_themes'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> Themes (Giao diện)</label>
+							<label><input type="checkbox" class="run-component-cb run-sub-cb" id="run_include_uploads" value="1" <?php checked( ! empty( $settings['backup_uploads'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> Uploads (Ảnh và media)</label>
+							<label><input type="checkbox" class="run-component-cb run-sub-cb" id="run_include_config" value="1" <?php checked( ! empty( $settings['backup_config'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> File wp-config.php</label>
+							<label><input type="checkbox" class="run-component-cb run-sub-cb" id="run_include_core" value="1" <?php checked( ! empty( $settings['backup_core'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> Core WP (wp-admin, wp-includes)</label>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -584,20 +611,39 @@ class HiBackup_Admin {
 					<tr>
 						<th scope="row"><?php esc_html_e( 'Thành phần mặc định', 'hibackup' ); ?></th>
 						<td>
-							<fieldset>
-								<label style="font-weight: 600; padding-bottom: 6px; display: inline-block; border-bottom: 1px dashed #c3c4c7; margin-bottom: 6px; width: 100%; max-width: 320px;">
+							<fieldset class="hibackup-components-fieldset" style="max-width: 680px;">
+								<label style="font-weight: 600; padding-bottom: 8px; display: block; border-bottom: 1px dashed #c3c4c7; margin-bottom: 12px;">
 									<input type="checkbox" id="hibackup_toggle_all_options"> <?php esc_html_e( 'Tất cả (Chọn / Bỏ chọn toàn bộ)', 'hibackup' ); ?>
-								</label><br>
-								<label><input type="checkbox" class="hibackup-component-cb" name="backup_db" value="1" <?php checked( ! empty( $settings['backup_db'] ) ); ?>> <strong>Database (Cơ sở dữ liệu)</strong></label><br>
-								<label><input type="checkbox" class="hibackup-component-cb" name="backup_full_source" id="backup_full_source" value="1" <?php checked( ! empty( $settings['backup_full_source'] ) ); ?>> <strong>Toàn bộ mã nguồn (Full Source - Gồm tất cả file & thư mục gốc)</strong></label><br>
-								<label><input type="checkbox" class="hibackup-component-cb" name="backup_plugins" value="1" <?php checked( ! empty( $settings['backup_plugins'] ) ); ?>> Plugins</label><br>
-								<label><input type="checkbox" class="hibackup-component-cb" name="backup_themes" value="1" <?php checked( ! empty( $settings['backup_themes'] ) ); ?>> Themes</label><br>
-								<label><input type="checkbox" class="hibackup-component-cb" name="backup_uploads" value="1" <?php checked( ! empty( $settings['backup_uploads'] ) ); ?>> Uploads (Hình ảnh, media)</label><br>
-								<label><input type="checkbox" class="hibackup-component-cb" name="backup_config" value="1" <?php checked( ! empty( $settings['backup_config'] ) ); ?>> File cấu hình wp-config.php</label><br>
-								<label><input type="checkbox" class="hibackup-component-cb" name="backup_core" value="1" <?php checked( ! empty( $settings['backup_core'] ) ); ?>> WordPress Core (wp-admin, wp-includes)</label>
+								</label>
+
+								<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
+									<label class="hibackup-choice-card">
+										<input type="checkbox" class="hibackup-component-cb" name="backup_db" value="1" <?php checked( ! empty( $settings['backup_db'] ) ); ?>> 
+										<span><strong>Database (Cơ sở dữ liệu SQL)</strong></span>
+									</label>
+									<label class="hibackup-choice-card">
+										<input type="checkbox" class="hibackup-component-cb" name="backup_full_source" id="backup_full_source" value="1" <?php checked( ! empty( $settings['backup_full_source'] ) ); ?>> 
+										<span><strong>Toàn bộ mã nguồn (Full Source - Gồm 100% file website)</strong></span>
+									</label>
+								</div>
+
+								<div id="hibackup-sub-components-options" class="hibackup-sub-components-box <?php echo ! empty( $settings['backup_full_source'] ) ? 'is-disabled' : ''; ?>">
+									<div class="hibackup-sub-hint">
+										<span class="dashicons dashicons-arrow-right-alt"></span>
+										<span class="hibackup-sub-hint-text" style="<?php echo ! empty( $settings['backup_full_source'] ) ? 'display:none;' : ''; ?>"><?php esc_html_e( 'Tùy chọn từng thành phần riêng lẻ (khi không chọn Full Source):', 'hibackup' ); ?></span>
+										<span class="hibackup-included-badge" style="<?php echo ! empty( $settings['backup_full_source'] ) ? '' : 'display:none;'; ?>"><?php esc_html_e( '✓ Đã bao gồm trong Full Source', 'hibackup' ); ?></span>
+									</div>
+									<div class="hibackup-sub-items">
+										<label><input type="checkbox" class="hibackup-component-cb hibackup-sub-cb" name="backup_plugins" value="1" <?php checked( ! empty( $settings['backup_plugins'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> Plugins</label>
+										<label><input type="checkbox" class="hibackup-component-cb hibackup-sub-cb" name="backup_themes" value="1" <?php checked( ! empty( $settings['backup_themes'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> Themes</label>
+										<label><input type="checkbox" class="hibackup-component-cb hibackup-sub-cb" name="backup_uploads" value="1" <?php checked( ! empty( $settings['backup_uploads'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> Uploads (Media)</label>
+										<label><input type="checkbox" class="hibackup-component-cb hibackup-sub-cb" name="backup_config" value="1" <?php checked( ! empty( $settings['backup_config'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> File wp-config.php</label>
+										<label><input type="checkbox" class="hibackup-component-cb hibackup-sub-cb" name="backup_core" value="1" <?php checked( ! empty( $settings['backup_core'] ) ); ?> <?php disabled( ! empty( $settings['backup_full_source'] ) ); ?>> WordPress Core (wp-admin, wp-includes)</label>
+									</div>
+								</div>
 							</fieldset>
-							<p class="description">
-								<?php esc_html_e( 'Tùy chọn "Toàn bộ mã nguồn (Full Source)" sẽ sao lưu toàn bộ thư mục website WordPress (bao gồm các file gốc như .htaccess, index.php, wp-config, wp-content...).', 'hibackup' ); ?>
+							<p class="description" style="margin-top: 8px;">
+								<?php esc_html_e( 'Khi chọn "Toàn bộ mã nguồn (Full Source)", toàn bộ thư mục website WordPress (.htaccess, index.php, wp-config, wp-content...) sẽ được nén đầy đủ.', 'hibackup' ); ?>
 							</p>
 						</td>
 					</tr>
