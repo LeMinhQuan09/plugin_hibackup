@@ -34,8 +34,9 @@ class HiBackup {
 			$settings = get_option( 'hibackup_settings', array() );
 			$defaults = array(
 				'gdrive_auth_type'  => 'oauth2',
-				'backup_db'         => 1,
-				'backup_plugins'    => 1,
+				'backup_db'          => 1,
+				'backup_full_source' => 0,
+				'backup_plugins'     => 1,
 				'backup_themes'     => 1,
 				'backup_uploads'    => 1,
 				'backup_config'     => 1,
@@ -63,6 +64,7 @@ class HiBackup {
 			update_option( 'hibackup_settings', array(
 				'gdrive_auth_type'     => 'oauth2',
 				'backup_db'            => 1,
+				'backup_full_source'   => 0,
 				'backup_plugins'       => 1,
 				'backup_themes'        => 1,
 				'backup_uploads'       => 1,
@@ -143,8 +145,9 @@ class HiBackup {
 		}
 
 		// 2. Xác định loại bản sao lưu (full, db, source, custom)
-		$has_db    = ! empty( $options['include_db'] );
-		$has_files = ! empty( $options['include_plugins'] ) || ! empty( $options['include_themes'] ) || ! empty( $options['include_uploads'] );
+		$has_db          = ! empty( $options['include_db'] );
+		$has_full_source = ! empty( $options['include_full_source'] );
+		$has_files       = $has_full_source || ! empty( $options['include_plugins'] ) || ! empty( $options['include_themes'] ) || ! empty( $options['include_uploads'] ) || ! empty( $options['include_core'] ) || ! empty( $options['include_config'] );
 
 		if ( $has_db && $has_files ) {
 			$type_tag = 'full';
@@ -248,6 +251,19 @@ class HiBackup {
 			call_user_func( $progress_callback, 'complete', 100, __( 'Đã xóa file tạm trên hosting và hoàn tất sao lưu lên Google Drive!', 'hibackup' ) );
 		}
 
+		$history_type = 'Custom';
+		if ( ! empty( $options['include_db'] ) && ! empty( $options['include_full_source'] ) ) {
+			$history_type = 'Full (Full Source + DB)';
+		} elseif ( ! empty( $options['include_full_source'] ) ) {
+			$history_type = 'Full Source';
+		} elseif ( ! empty( $options['include_db'] ) && ! empty( $options['include_plugins'] ) ) {
+			$history_type = 'Full (Source + DB)';
+		} elseif ( ! empty( $options['include_db'] ) ) {
+			$history_type = 'Database Only';
+		} elseif ( $has_files ) {
+			$history_type = 'Source Files';
+		}
+
 		// 5. Lưu lịch sử sao lưu
 		$history_item = array(
 			'id'            => uniqid( 'bk_' ),
@@ -256,7 +272,7 @@ class HiBackup {
 			'file_size'     => size_format( $final_zip_size ),
 			'drive_file_id' => $upload_res['id'] ?? '',
 			'drive_link'    => ! empty( $upload_res['id'] ) ? 'https://drive.google.com/file/d/' . $upload_res['id'] . '/view' : '',
-			'type'          => ( ! empty( $options['include_db'] ) && ! empty( $options['include_plugins'] ) ) ? 'Full (Source + DB)' : 'Custom',
+			'type'          => $history_type,
 			'status'        => 'success',
 		);
 

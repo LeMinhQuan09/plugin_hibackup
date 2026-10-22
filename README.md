@@ -2,7 +2,7 @@
 
 [![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net)
-[![Version](https://img.shields.io/badge/Version-1.0.1-green.svg)](https://github.com/LeMinhQuan09/plugin_hibackup/releases)
+[![Version](https://img.shields.io/badge/Version-1.1.0-green.svg)](https://github.com/LeMinhQuan09/plugin_hibackup/releases)
 [![Author](https://img.shields.io/badge/Author-hiseo-orange.svg)](https://hiseo.vn)
 [![License](https://img.shields.io/badge/License-GPLv2-lightgrey.svg)](LICENSE)
 
@@ -19,7 +19,8 @@
   * **Service Account (JSON Key):** Dành cho Google Workspace hoặc sao lưu nền hoàn toàn tự động không cần refresh token.
 * 📦 **Tùy chọn thành phần sao lưu linh hoạt:**
   * Cơ sở dữ liệu (Database SQL).
-  * Plugins, Themes, Uploads (Media), File cấu hình `wp-config.php`, WordPress Core.
+  * **Toàn bộ mã nguồn (Full Source):** Sao lưu 100% website gồm tất cả các file gốc WordPress (`.htaccess`, `index.php`, `wp-config.php`, `wp-load.php`, `wp-content`...).
+  * Hoặc tùy chọn riêng lẻ: Plugins, Themes, Uploads (Media), File cấu hình `wp-config.php`, WordPress Core.
   * Nút **"Tất cả"** tiện lợi chọn / bỏ chọn nhanh toàn bộ thành phần.
 * ⏰ **Lịch trình tự động thông minh (WP-Cron):**
   * Hỗ trợ chu kỳ: Hàng ngày, 2-3 ngày, hàng tuần, 2 tuần, hàng tháng hoặc theo giờ (mỗi 1h, 2h, 4h, 6h, 12h).

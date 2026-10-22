@@ -38,35 +38,12 @@ class HiBackup_Files {
 			$zip->addFile( $db_sql_path, 'database.sql' );
 		}
 
-		// 2. Thêm file wp-config.php (nếu được bật)
-		if ( ! empty( $options['include_config'] ) ) {
-			$config_file = ABSPATH . 'wp-config.php';
-			if ( file_exists( $config_file ) ) {
-				$zip->addFile( $config_file, 'wp-config.php' );
-			}
-		}
-
-		// 3. Thêm các thư mục mã nguồn
-		$directories_to_zip = array();
-		if ( ! empty( $options['include_plugins'] ) ) {
-			$directories_to_zip['wp-content/plugins'] = WP_PLUGIN_DIR;
-		}
-		if ( ! empty( $options['include_themes'] ) ) {
-			$directories_to_zip['wp-content/themes'] = get_theme_root();
-		}
-		if ( ! empty( $options['include_uploads'] ) ) {
-			$upload_dir = wp_upload_dir();
-			$directories_to_zip['wp-content/uploads'] = $upload_dir['basedir'];
-		}
-		if ( ! empty( $options['include_core'] ) ) {
-			$directories_to_zip['wp-admin'] = ABSPATH . 'wp-admin';
-			$directories_to_zip['wp-includes'] = ABSPATH . WPINC;
-		}
-
 		// Danh sách các mẫu cần bỏ qua (để tiết kiệm dung lượng và tránh loop)
 		$exclude_patterns = array(
 			'hibackup-temp',
 			'wp-content/cache',
+			'wp-content/updraft',
+			'wp-content/backups',
 			'cache',
 			'.git',
 			'.svn',
@@ -76,9 +53,46 @@ class HiBackup_Files {
 			'debug.log',
 		);
 
-		foreach ( $directories_to_zip as $relative_prefix => $dir_path ) {
-			if ( is_dir( $dir_path ) ) {
-				self::add_folder_to_zip( $zip, $dir_path, $relative_prefix, $exclude_patterns );
+		// 2. Nén toàn bộ mã nguồn website (Full Source) nếu được bật
+		if ( ! empty( $options['include_full_source'] ) ) {
+			self::add_folder_to_zip( $zip, ABSPATH, '', $exclude_patterns, $zip_path, $db_sql_path );
+
+			// Nếu wp-config.php nằm ở thư mục cha ngoài ABSPATH, vẫn thêm vào
+			if ( ! file_exists( ABSPATH . 'wp-config.php' ) && file_exists( dirname( ABSPATH ) . '/wp-config.php' ) ) {
+				$zip->addFile( dirname( ABSPATH ) . '/wp-config.php', 'wp-config.php' );
+			}
+		} else {
+			// 3. Hoặc nén từng thành phần riêng lẻ được chọn
+			if ( ! empty( $options['include_config'] ) ) {
+				$config_file = ABSPATH . 'wp-config.php';
+				if ( ! file_exists( $config_file ) && file_exists( dirname( ABSPATH ) . '/wp-config.php' ) ) {
+					$config_file = dirname( ABSPATH ) . '/wp-config.php';
+				}
+				if ( file_exists( $config_file ) ) {
+					$zip->addFile( $config_file, 'wp-config.php' );
+				}
+			}
+
+			$directories_to_zip = array();
+			if ( ! empty( $options['include_plugins'] ) ) {
+				$directories_to_zip['wp-content/plugins'] = WP_PLUGIN_DIR;
+			}
+			if ( ! empty( $options['include_themes'] ) ) {
+				$directories_to_zip['wp-content/themes'] = get_theme_root();
+			}
+			if ( ! empty( $options['include_uploads'] ) ) {
+				$upload_dir = wp_upload_dir();
+				$directories_to_zip['wp-content/uploads'] = $upload_dir['basedir'];
+			}
+			if ( ! empty( $options['include_core'] ) ) {
+				$directories_to_zip['wp-admin'] = ABSPATH . 'wp-admin';
+				$directories_to_zip['wp-includes'] = ABSPATH . WPINC;
+			}
+
+			foreach ( $directories_to_zip as $relative_prefix => $dir_path ) {
+				if ( is_dir( $dir_path ) ) {
+					self::add_folder_to_zip( $zip, $dir_path, $relative_prefix, $exclude_patterns, $zip_path, $db_sql_path );
+				}
 			}
 		}
 
@@ -94,17 +108,31 @@ class HiBackup_Files {
 	/**
 	 * Đệ quy thêm file trong thư mục vào Zip với bộ lọc loại trừ
 	 */
-	private static function add_folder_to_zip( &$zip, $folder_path, $local_prefix, $exclude_patterns = array() ) {
+	private static function add_folder_to_zip( &$zip, $folder_path, $local_prefix, $exclude_patterns = array(), $zip_path = '', $db_sql_path = '' ) {
 		$folder_path = rtrim( $folder_path, '/\\' );
+		$normalized_folder_path = wp_normalize_path( $folder_path );
+		$normalized_zip_path = ! empty( $zip_path ) ? wp_normalize_path( $zip_path ) : '';
+		$normalized_sql_path = ! empty( $db_sql_path ) ? wp_normalize_path( $db_sql_path ) : '';
+
 		$files = new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator( $folder_path, RecursiveDirectoryIterator::SKIP_DOTS ),
 			RecursiveIteratorIterator::SELF_FIRST
 		);
 
 		foreach ( $files as $file ) {
-			$file_path = wp_normalize_path( $file->getRealPath() );
-			$relative_path = substr( $file_path, strlen( wp_normalize_path( $folder_path ) ) + 1 );
-			$zip_entry_path = ltrim( $local_prefix . '/' . $relative_path, '/' );
+			$real_path = $file->getRealPath();
+			if ( false === $real_path ) {
+				continue;
+			}
+			$file_path = wp_normalize_path( $real_path );
+
+			// Tránh loop chính file zip đang tạo hoặc file dump SQL
+			if ( ( $normalized_zip_path && $file_path === $normalized_zip_path ) || ( $normalized_sql_path && $file_path === $normalized_sql_path ) ) {
+				continue;
+			}
+
+			$relative_path = substr( $file_path, strlen( $normalized_folder_path ) + 1 );
+			$zip_entry_path = ! empty( $local_prefix ) ? ltrim( $local_prefix . '/' . $relative_path, '/' ) : $relative_path;
 
 			// Kiểm tra loại trừ
 			$should_exclude = false;
@@ -119,10 +147,14 @@ class HiBackup_Files {
 				continue;
 			}
 
-			if ( $file->isDir() ) {
-				$zip->addEmptyDir( $zip_entry_path );
-			} elseif ( $file->isFile() ) {
-				$zip->addFile( $file_path, $zip_entry_path );
+			try {
+				if ( $file->isDir() ) {
+					$zip->addEmptyDir( $zip_entry_path );
+				} elseif ( $file->isFile() ) {
+					$zip->addFile( $file_path, $zip_entry_path );
+				}
+			} catch ( Exception $e ) {
+				continue;
 			}
 		}
 	}

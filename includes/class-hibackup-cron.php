@@ -122,12 +122,13 @@ class HiBackup_Cron {
 		// Tạo một phiên sao lưu hoàn chỉnh
 		$orchestrator = new HiBackup();
 		$result = $orchestrator->run_full_backup( array(
-			'include_db'      => ! empty( $options['backup_db'] ),
-			'include_plugins' => ! empty( $options['backup_plugins'] ),
-			'include_themes'  => ! empty( $options['backup_themes'] ),
-			'include_uploads' => ! empty( $options['backup_uploads'] ),
-			'include_config'  => ! empty( $options['backup_config'] ),
-			'include_core'    => ! empty( $options['backup_core'] ),
+			'include_db'          => ! empty( $options['backup_db'] ),
+			'include_full_source' => ! empty( $options['backup_full_source'] ),
+			'include_plugins'     => ! empty( $options['backup_plugins'] ),
+			'include_themes'      => ! empty( $options['backup_themes'] ),
+			'include_uploads'     => ! empty( $options['backup_uploads'] ),
+			'include_config'      => ! empty( $options['backup_config'] ),
+			'include_core'        => ! empty( $options['backup_core'] ),
 		) );
 
 		// Tự động xoay vòng bản sao lưu trên Drive (xóa bản cũ nếu vượt quá giới hạn)

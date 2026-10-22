@@ -4,7 +4,7 @@ Tags: backup, google drive, cloud backup, database backup, auto backup
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ HiBackup là plugin sao lưu WordPress hiện đại, tự động nén toàn b�
 Điểm đặc biệt: Ngay sau khi tải lên thành công, toàn bộ file tạm trên hosting sẽ được xóa sạch lập tức, đảm bảo hosting của bạn không bao giờ bị đầy dung lượng.
 
 * Hỗ trợ Google Drive OAuth 2.0 (1-Click) và Service Account JSON.
-* Sao lưu linh hoạt: Database, Plugins, Themes, Uploads, Config, Core WP.
+* Sao lưu linh hoạt: Database, Toàn bộ mã nguồn (Full Source), Plugins, Themes, Uploads, Config, Core WP.
 * Lịch trình sao lưu tự động phong phú (Hàng ngày, 2-3 ngày, hàng tuần, hàng tháng hoặc theo giờ).
 * Tự động xóa các bản sao lưu cũ trên Google Drive khi vượt số lượng quy định.
 * Hỗ trợ cập nhật tự động trực tiếp từ GitHub Releases.
@@ -28,6 +28,11 @@ HiBackup là plugin sao lưu WordPress hiện đại, tự động nén toàn b�
 3. Truy cập menu 'HiBackup' trong trang quản trị để kết nối Google Drive và thiết lập lịch sao lưu.
 
 == Changelog ==
+
+= 1.1.0 =
+* Tính năng mới: Bổ sung tùy chọn "Toàn bộ mã nguồn (Full Source)" cho phép sao lưu 100% thư mục website WordPress (gồm cả các file gốc .htaccess, index.php, wp-config.php, wp-content...).
+* Cải tiến: Cơ chế đồng bộ thông minh giữa tùy chọn Full Source và các thành phần con.
+* Tối ưu: Bổ sung bộ lọc loại trừ các thư mục rác (updraft, cache, backups, node_modules...) nhằm tiết kiệm dung lượng.
 
 = 1.0.1 =
 * Sửa lỗi: Hiển thị thông báo WordPress (admin notices) ngay ngắn dưới banner với mỏ neo chuẩn wp-header-end.

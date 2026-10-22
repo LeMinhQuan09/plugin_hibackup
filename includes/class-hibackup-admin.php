@@ -149,8 +149,9 @@ class HiBackup_Admin {
 			$current['gdrive_service_account_json'] = $sa_json;
 			$current['gdrive_folder_id']            = sanitize_text_field( wp_unslash( $_POST['gdrive_folder_id'] ?? '' ) );
 		} elseif ( 'options' === $active_tab ) {
-			$current['backup_db']         = ! empty( $_POST['backup_db'] ) ? 1 : 0;
-			$current['backup_plugins']    = ! empty( $_POST['backup_plugins'] ) ? 1 : 0;
+			$current['backup_db']          = ! empty( $_POST['backup_db'] ) ? 1 : 0;
+			$current['backup_full_source'] = ! empty( $_POST['backup_full_source'] ) ? 1 : 0;
+			$current['backup_plugins']     = ! empty( $_POST['backup_plugins'] ) ? 1 : 0;
 			$current['backup_themes']     = ! empty( $_POST['backup_themes'] ) ? 1 : 0;
 			$current['backup_uploads']    = ! empty( $_POST['backup_uploads'] ) ? 1 : 0;
 			$current['backup_config']     = ! empty( $_POST['backup_config'] ) ? 1 : 0;
@@ -320,6 +321,7 @@ class HiBackup_Admin {
 						<input type="checkbox" id="run_toggle_all_components"> <?php esc_html_e( 'Tất cả (Chọn / Bỏ chọn toàn bộ)', 'hibackup' ); ?>
 					</label>
 					<label><input type="checkbox" class="run-component-cb" id="run_include_db" value="1" <?php checked( ! empty( $settings['backup_db'] ) ); ?>> <strong>Database (Cơ sở dữ liệu SQL)</strong></label>
+					<label><input type="checkbox" class="run-component-cb" id="run_include_full_source" value="1" <?php checked( ! empty( $settings['backup_full_source'] ) ); ?>> <strong>Toàn bộ mã nguồn (Full Source)</strong></label>
 					<label><input type="checkbox" class="run-component-cb" id="run_include_plugins" value="1" <?php checked( ! empty( $settings['backup_plugins'] ) ); ?>> Plugins (Thư mục plugin)</label>
 					<label><input type="checkbox" class="run-component-cb" id="run_include_themes" value="1" <?php checked( ! empty( $settings['backup_themes'] ) ); ?>> Themes (Giao diện)</label>
 					<label><input type="checkbox" class="run-component-cb" id="run_include_uploads" value="1" <?php checked( ! empty( $settings['backup_uploads'] ) ); ?>> Uploads (Ảnh và tệp tải lên)</label>
@@ -587,12 +589,16 @@ class HiBackup_Admin {
 									<input type="checkbox" id="hibackup_toggle_all_options"> <?php esc_html_e( 'Tất cả (Chọn / Bỏ chọn toàn bộ)', 'hibackup' ); ?>
 								</label><br>
 								<label><input type="checkbox" class="hibackup-component-cb" name="backup_db" value="1" <?php checked( ! empty( $settings['backup_db'] ) ); ?>> <strong>Database (Cơ sở dữ liệu)</strong></label><br>
+								<label><input type="checkbox" class="hibackup-component-cb" name="backup_full_source" id="backup_full_source" value="1" <?php checked( ! empty( $settings['backup_full_source'] ) ); ?>> <strong>Toàn bộ mã nguồn (Full Source - Gồm tất cả file & thư mục gốc)</strong></label><br>
 								<label><input type="checkbox" class="hibackup-component-cb" name="backup_plugins" value="1" <?php checked( ! empty( $settings['backup_plugins'] ) ); ?>> Plugins</label><br>
 								<label><input type="checkbox" class="hibackup-component-cb" name="backup_themes" value="1" <?php checked( ! empty( $settings['backup_themes'] ) ); ?>> Themes</label><br>
 								<label><input type="checkbox" class="hibackup-component-cb" name="backup_uploads" value="1" <?php checked( ! empty( $settings['backup_uploads'] ) ); ?>> Uploads (Hình ảnh, media)</label><br>
 								<label><input type="checkbox" class="hibackup-component-cb" name="backup_config" value="1" <?php checked( ! empty( $settings['backup_config'] ) ); ?>> File cấu hình wp-config.php</label><br>
 								<label><input type="checkbox" class="hibackup-component-cb" name="backup_core" value="1" <?php checked( ! empty( $settings['backup_core'] ) ); ?>> WordPress Core (wp-admin, wp-includes)</label>
 							</fieldset>
+							<p class="description">
+								<?php esc_html_e( 'Tùy chọn "Toàn bộ mã nguồn (Full Source)" sẽ sao lưu toàn bộ thư mục website WordPress (bao gồm các file gốc như .htaccess, index.php, wp-config, wp-content...).', 'hibackup' ); ?>
+							</p>
 						</td>
 					</tr>
 
@@ -846,8 +852,9 @@ class HiBackup_Admin {
 
 		// Nhận các lựa chọn từ checkbox
 		$options = array(
-			'include_db'      => ! empty( $_POST['include_db'] ),
-			'include_plugins' => ! empty( $_POST['include_plugins'] ),
+			'include_db'          => ! empty( $_POST['include_db'] ),
+			'include_full_source' => ! empty( $_POST['include_full_source'] ),
+			'include_plugins'     => ! empty( $_POST['include_plugins'] ),
 			'include_themes'  => ! empty( $_POST['include_themes'] ),
 			'include_uploads' => ! empty( $_POST['include_uploads'] ),
 			'include_config'  => ! empty( $_POST['include_config'] ),

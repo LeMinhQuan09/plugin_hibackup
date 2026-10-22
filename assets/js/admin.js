@@ -109,6 +109,7 @@
 					action: 'hibackup_run_backup',
 					nonce: hibackupData.nonce,
 					include_db: $('#run_include_db').is(':checked') ? 1 : 0,
+					include_full_source: $('#run_include_full_source').is(':checked') ? 1 : 0,
 					include_plugins: $('#run_include_plugins').is(':checked') ? 1 : 0,
 					include_themes: $('#run_include_themes').is(':checked') ? 1 : 0,
 					include_uploads: $('#run_include_uploads').is(':checked') ? 1 : 0,
@@ -202,6 +203,19 @@
 			}
 		}
 
+		// Khi chọn Full Source ở Cấu hình, tự động tích chọn các thành phần con
+		$('#backup_full_source').on('change', function () {
+			if ($(this).is(':checked')) {
+				$('input[name="backup_plugins"], input[name="backup_themes"], input[name="backup_uploads"], input[name="backup_config"], input[name="backup_core"]').prop('checked', true);
+			}
+		});
+
+		$('input[name="backup_plugins"], input[name="backup_themes"], input[name="backup_uploads"], input[name="backup_config"], input[name="backup_core"]').on('change', function () {
+			if (!$(this).is(':checked')) {
+				$('#backup_full_source').prop('checked', false);
+			}
+		});
+
 		$('#hibackup_toggle_all_options').on('change', function () {
 			var isChecked = $(this).is(':checked');
 			$('.hibackup-component-cb').prop('checked', isChecked);
@@ -229,6 +243,19 @@
 				$toggle.prop('checked', false).prop('indeterminate', true);
 			}
 		}
+
+		// Khi chọn Full Source ở Sao lưu ngay, tự động tích chọn các thành phần con
+		$('#run_include_full_source').on('change', function () {
+			if ($(this).is(':checked')) {
+				$('#run_include_plugins, #run_include_themes, #run_include_uploads, #run_include_config, #run_include_core').prop('checked', true);
+			}
+		});
+
+		$('#run_include_plugins, #run_include_themes, #run_include_uploads, #run_include_config, #run_include_core').on('change', function () {
+			if (!$(this).is(':checked')) {
+				$('#run_include_full_source').prop('checked', false);
+			}
+		});
 
 		$('#run_toggle_all_components').on('change', function () {
 			var isChecked = $(this).is(':checked');

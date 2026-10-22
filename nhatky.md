@@ -3,8 +3,8 @@
 - **Tên plugin:** HiBackup – Sao lưu WordPress lên Google Drive (0MB Hosting Footprint)
 - **Tác giả:** hiseo ([https://hiseo.vn](https://hiseo.vn))
 - **Mã nguồn GitHub:** [https://github.com/LeMinhQuan09/plugin_hibackup](https://github.com/LeMinhQuan09/plugin_hibackup)
-- **Phiên bản hiện tại:** `v1.0.1`
-- **Ngày ghi nhận:** 20/10/2026
+- **Phiên bản hiện tại:** `v1.1.0`
+- **Ngày ghi nhận:** 22/10/2026
 
 ---
 
@@ -63,10 +63,22 @@ Trong phiên làm việc này, toàn bộ quy trình hoàn thiện UI/UX, sửa 
   - Bổ sung CSS bảo vệ (`.hibackup-wrap > .notice { width: 100%; clear: both; }`) để mọi thông báo hiển thị ngay ngắn, chuẩn mực toàn chiều ngang bên dưới Header.
 
 ### 2.7. Nâng cấp & Phát hành Phiên bản v1.0.1
-- Nâng số hiệu phiên bản lên **`1.0.1`** theo chuẩn Semantic Versioning (Bản vá lỗi giao diện & cập nhật tài liệu).
-- Đồng bộ phiên bản trên [hibackup.php](hibackup.php), [readme.txt](readme.txt) và [README.md](README.md).
-- Tự động đóng gói `dist/hibackup.zip` và `dist/hibackup-v1.0.1.zip`.
-- Tạo Git Tag **`v1.0.1`** và đẩy toàn bộ lên GitHub.
+### 2.8. Phát triển Tính năng "Toàn bộ mã nguồn (Full Source)" (v1.1.0)
+- **Yêu cầu:** Bổ sung tùy chọn sao lưu Full Source, bao gồm tất cả các file mã nguồn hiện tại của website WordPress (các file gốc như `index.php`, `.htaccess`, `wp-config.php`, `wp-load.php`, `robots.txt`, thư mục `wp-content`, `wp-admin`, `wp-includes`...).
+- **Xử lý cốt lõi (`HiBackup_Files::create_zip`):**
+  - Khi bật `include_full_source`, sử dụng `RecursiveDirectoryIterator` duyệt trực tiếp từ thư mục gốc `ABSPATH`.
+  - Giữ nguyên cấu trúc tương đối chuẩn (`index.php`, `wp-content/...`, `.htaccess`).
+  - Hỗ trợ trường hợp bảo mật khi `wp-config.php` nằm ngoài thư mục `ABSPATH`.
+  - Tối ưu bộ lọc loại trừ (`exclude_patterns`): tự động bỏ qua `hibackup-temp`, `cache`, `wp-content/updraft`, `wp-content/backups`, `.git`, `node_modules`, `error_log`...
+  - Kiểm tra tuyệt đối chống loop đệ quy nén chính file ZIP đang ghi hoặc file dump SQL.
+- **Đồng bộ Giao diện & Trải nghiệm (UI/UX):**
+  - Bổ sung checkbox `Toàn bộ mã nguồn (Full Source)` ở cả tab **Sao lưu ngay** và tab **Cấu hình chung** (Thành phần mặc định).
+  - Tự động tích hợp với nút "Tất cả": khi bấm chọn Tất cả sẽ chọn cả Full Source.
+  - Viết logic thông minh: khi tích chọn Full Source sẽ tự động chọn các thành phần con (`Plugins`, `Themes`, `Uploads`, `Config`, `Core`); nếu bỏ chọn một thành phần con thì tự động hủy Full Source (chuyển sang chế độ tùy chỉnh).
+- **Lập lịch Cron & Đặt tên:**
+  - Hỗ trợ lưu trữ cấu hình `backup_full_source` trong cron tự động hàng ngày/hàng tuần.
+  - Quy ước đặt tên file chuẩn `bk_[site]_full_[date].zip` và ghi lịch sử `Full (Full Source + DB)`.
+- **Nâng cấp phiên bản:** Phát hành **`v1.1.0`** (Minor Release).
 
 ---
 
