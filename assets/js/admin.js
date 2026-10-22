@@ -9,9 +9,13 @@
 		$('.hibackup-auth-toggle').on('change', function () {
 			var selected = $(this).val();
 			if (selected === 'service_account') {
+				$('#card_auth_sa').addClass('is-selected');
+				$('#card_auth_oauth2').removeClass('is-selected');
 				$('#auth-section-oauth2').hide();
 				$('#auth-section-sa').show();
 			} else {
+				$('#card_auth_oauth2').addClass('is-selected');
+				$('#card_auth_sa').removeClass('is-selected');
 				$('#auth-section-oauth2').show();
 				$('#auth-section-sa').hide();
 			}

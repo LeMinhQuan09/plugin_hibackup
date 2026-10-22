@@ -323,6 +323,11 @@ label.hibackup-choice-card {
 	color: #059669;
 }
 
+.hibackup-mode-icon-purple {
+	background: #f5f3ff;
+	color: #7c3aed;
+}
+
 /* Mode Cards Grid (Full vs Custom) */
 .hibackup-mode-cards {
 	display: grid;
@@ -940,5 +945,209 @@ label.hibackup-sub-chip {
 .hibackup-guide-box ul {
 	margin: 6px 0 6px 20px;
 	list-style: disc;
+}
+
+/* ==========================================================================
+   Lịch sử sao lưu (History Table & Actions)
+   ========================================================================== */
+.hibackup-table-responsive {
+	width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+	margin-top: 15px;
+	background: #ffffff;
+	scrollbar-width: thin;
+	scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.hibackup-table-responsive::-webkit-scrollbar {
+	height: 8px;
+}
+
+.hibackup-table-responsive::-webkit-scrollbar-track {
+	background: #f1f5f9;
+	border-radius: 0 0 8px 8px;
+}
+
+.hibackup-table-responsive::-webkit-scrollbar-thumb {
+	background: #cbd5e1;
+	border-radius: 4px;
+}
+
+.hibackup-table-responsive::-webkit-scrollbar-thumb:hover {
+	background: #94a3b8;
+}
+
+.hibackup-history-table {
+	border: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	margin: 0 !important;
+	width: 100% !important;
+	min-width: 820px !important;
+}
+
+.hibackup-history-table thead th {
+	background: #f8fafc !important;
+	color: #475569 !important;
+	font-weight: 600 !important;
+	font-size: 13px !important;
+	padding: 11px 12px !important;
+	border-bottom: 1px solid #e2e8f0 !important;
+	white-space: nowrap !important;
+}
+
+.hibackup-history-table tbody td {
+	vertical-align: middle !important;
+	padding: 11px 12px !important;
+	font-size: 13px !important;
+	color: #334155;
+	border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.hibackup-history-table tbody td:not(:first-child) {
+	white-space: nowrap !important;
+}
+
+.hibackup-history-table tbody tr:last-child td {
+	border-bottom: none !important;
+}
+
+.hibackup-history-table tbody tr:hover td {
+	background-color: #f8fafc !important;
+}
+
+.hibackup-filename {
+	font-size: 12.5px;
+	color: #0f172a;
+	word-break: break-all;
+	line-height: 1.4;
+	display: block;
+}
+
+.hibackup-badge-size {
+	display: inline-block;
+	background: #f1f5f9;
+	color: #334155;
+	font-size: 11.5px;
+	font-weight: 600;
+	padding: 2px 7px;
+	border-radius: 4px;
+	border: 1px solid #e2e8f0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+}
+
+.hibackup-badge-type {
+	display: inline-block;
+	background: #f8fafc;
+	color: #475569;
+	font-size: 11.5px;
+	font-weight: 500;
+	padding: 2px 7px;
+	border-radius: 4px;
+	border: 1px solid #e2e8f0;
+}
+
+.hibackup-badge-cloud {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: #eff6ff;
+	color: #1d4ed8;
+	font-size: 12px;
+	font-weight: 500;
+	padding: 3px 9px;
+	border-radius: 12px;
+	border: 1px solid #bfdbfe;
+}
+
+.hibackup-badge-cloud .dashicons {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	line-height: 14px;
+}
+
+.hibackup-action-group {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: nowrap;
+}
+
+.wp-core-ui .hibackup-action-group .hibackup-btn-drive {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 5px !important;
+	height: 30px !important;
+	line-height: 28px !important;
+	padding: 0 10px !important;
+	border-radius: 6px !important;
+	font-size: 12px !important;
+	font-weight: 500 !important;
+	background: #1a73e8 !important;
+	border: 1px solid #1a73e8 !important;
+	color: #ffffff !important;
+	text-decoration: none !important;
+	box-shadow: 0 1px 2px rgba(26, 115, 232, 0.15) !important;
+	transition: all 0.15s ease !important;
+}
+
+.wp-core-ui .hibackup-action-group .hibackup-btn-drive:hover {
+	background: #1557b0 !important;
+	border-color: #1557b0 !important;
+	color: #ffffff !important;
+	box-shadow: 0 2px 4px rgba(26, 115, 232, 0.25) !important;
+}
+
+.wp-core-ui .hibackup-action-group .hibackup-btn-drive .dashicons {
+	font-size: 14px !important;
+	width: 14px !important;
+	height: 14px !important;
+	line-height: 14px !important;
+	margin: 0 !important;
+}
+
+.wp-core-ui .hibackup-action-group .hibackup-btn-delete {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 4px !important;
+	height: 30px !important;
+	line-height: 28px !important;
+	padding: 0 10px !important;
+	border-radius: 6px !important;
+	font-size: 12px !important;
+	font-weight: 500 !important;
+	background: #ffffff !important;
+	border: 1px solid #fecaca !important;
+	color: #dc2626 !important;
+	cursor: pointer !important;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+	transition: all 0.15s ease !important;
+}
+
+.wp-core-ui .hibackup-action-group .hibackup-btn-delete:hover {
+	background: #fef2f2 !important;
+	border-color: #ef4444 !important;
+	color: #b91c1c !important;
+}
+
+.wp-core-ui .hibackup-action-group .hibackup-btn-delete .dashicons {
+	font-size: 14px !important;
+	width: 14px !important;
+	height: 14px !important;
+	line-height: 14px !important;
+	margin: 0 !important;
+	color: currentColor !important;
+}
+
+.wp-core-ui .hibackup-action-group .hibackup-btn-delete:disabled {
+	opacity: 0.5 !important;
+	cursor: not-allowed !important;
 }
 

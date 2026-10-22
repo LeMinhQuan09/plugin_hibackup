@@ -489,14 +489,55 @@ class HiBackup_Admin {
 					<tr>
 						<th scope="row"><label><?php esc_html_e( 'Phương thức kết nối', 'hibackup' ); ?></label></th>
 						<td>
-							<label style="margin-right: 20px;">
-								<input type="radio" name="gdrive_auth_type" value="oauth2" <?php checked( 'oauth2', $auth_type ); ?> class="hibackup-auth-toggle">
-								<strong>Google OAuth 2.0 (Khuyên dùng cho tài khoản cá nhân)</strong>
-							</label>
-							<label>
-								<input type="radio" name="gdrive_auth_type" value="service_account" <?php checked( 'service_account', $auth_type ); ?> class="hibackup-auth-toggle">
-								<strong>Service Account JSON (Khuyên dùng cho Google Workspace / Tự động 100%)</strong>
-							</label>
+							<div class="hibackup-mode-cards hibackup-auth-cards" style="max-width: 680px; margin-bottom: 0;">
+								<label class="hibackup-mode-card <?php echo 'oauth2' === $auth_type ? 'is-selected' : ''; ?>" id="card_auth_oauth2">
+									<div class="hibackup-mode-card-header">
+										<div class="hibackup-mode-icon hibackup-mode-icon-blue">
+											<span class="dashicons dashicons-google"></span>
+										</div>
+										<div class="hibackup-mode-title-wrap">
+											<span class="hibackup-mode-title">
+												<?php esc_html_e( 'Google OAuth 2.0', 'hibackup' ); ?>
+												<span class="hibackup-mode-sub-title"><?php esc_html_e( '(Tài khoản cá nhân)', 'hibackup' ); ?></span>
+											</span>
+										</div>
+										<div class="hibackup-mode-radio-wrap">
+											<input type="radio" name="gdrive_auth_type" value="oauth2" <?php checked( 'oauth2', $auth_type ); ?> class="hibackup-auth-toggle">
+										</div>
+									</div>
+									<div class="hibackup-mode-desc">
+										<?php esc_html_e( 'Xác thực 1-Click bằng tài khoản Gmail cá nhân. Dễ cài đặt, an toàn và trực quan.', 'hibackup' ); ?>
+									</div>
+									<div class="hibackup-mode-tags">
+										<span class="hibackup-tag"><?php esc_html_e( '✓ Đăng nhập 1-Click', 'hibackup' ); ?></span>
+										<span class="hibackup-tag"><?php esc_html_e( '✓ Gmail cá nhân', 'hibackup' ); ?></span>
+									</div>
+								</label>
+
+								<label class="hibackup-mode-card <?php echo 'service_account' === $auth_type ? 'is-selected' : ''; ?>" id="card_auth_sa">
+									<div class="hibackup-mode-card-header">
+										<div class="hibackup-mode-icon hibackup-mode-icon-purple">
+											<span class="dashicons dashicons-id-alt"></span>
+										</div>
+										<div class="hibackup-mode-title-wrap">
+											<span class="hibackup-mode-title">
+												<?php esc_html_e( 'Service Account JSON', 'hibackup' ); ?>
+												<span class="hibackup-mode-sub-title"><?php esc_html_e( '(Google Workspace / Tự động)', 'hibackup' ); ?></span>
+											</span>
+										</div>
+										<div class="hibackup-mode-radio-wrap">
+											<input type="radio" name="gdrive_auth_type" value="service_account" <?php checked( 'service_account', $auth_type ); ?> class="hibackup-auth-toggle">
+										</div>
+									</div>
+									<div class="hibackup-mode-desc">
+										<?php esc_html_e( 'Dùng file JSON key độc lập. Phù hợp cho Google Workspace, Shared Drive hoặc máy chủ tự động 100%.', 'hibackup' ); ?>
+									</div>
+									<div class="hibackup-mode-tags">
+										<span class="hibackup-tag"><?php esc_html_e( '✓ Tự động 100%', 'hibackup' ); ?></span>
+										<span class="hibackup-tag"><?php esc_html_e( '✓ Google Workspace', 'hibackup' ); ?></span>
+									</div>
+								</label>
+							</div>
 						</td>
 					</tr>
 
@@ -963,39 +1004,43 @@ class HiBackup_Admin {
 					<p><?php esc_html_e( 'Chưa có bản sao lưu nào. Hãy vào tab "Sao lưu ngay" để thực hiện lần đầu tiên!', 'hibackup' ); ?></p>
 				</div>
 			<?php else : ?>
-				<table class="wp-list-table widefat fixed striped">
-					<thead>
-						<tr>
-							<th style="width: 25%;"><?php esc_html_e( 'Tên File', 'hibackup' ); ?></th>
-							<th><?php esc_html_e( 'Thời gian', 'hibackup' ); ?></th>
-							<th><?php esc_html_e( 'Dung lượng', 'hibackup' ); ?></th>
-							<th><?php esc_html_e( 'Loại', 'hibackup' ); ?></th>
-							<th><?php esc_html_e( 'Lưu trữ', 'hibackup' ); ?></th>
-							<th><?php esc_html_e( 'Hành động', 'hibackup' ); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ( $history as $item ) : ?>
-							<tr id="row-<?php echo esc_attr( $item['id'] ); ?>">
-								<td><strong><?php echo esc_html( $item['filename'] ); ?></strong></td>
-								<td><?php echo esc_html( date_i18n( 'd/m/Y H:i:s', $item['timestamp'] ) ); ?></td>
-								<td><span class="badge"><?php echo esc_html( $item['file_size'] ); ?></span></td>
-								<td><?php echo esc_html( $item['type'] ); ?></td>
-								<td><span class="hibackup-badge-cloud"><span class="dashicons dashicons-google"></span> Google Drive</span></td>
-								<td>
-									<?php if ( ! empty( $item['drive_link'] ) ) : ?>
-										<a href="<?php echo esc_url( $item['drive_link'] ); ?>" target="_blank" class="button button-small button-primary hibackup-btn-small">
-											<span class="dashicons dashicons-external"></span> <span><?php esc_html_e( 'Mở Drive', 'hibackup' ); ?></span>
-										</a>
-									<?php endif; ?>
-									<button type="button" class="button button-small button-link-delete btn-delete-history" data-id="<?php echo esc_attr( $item['id'] ); ?>" data-fileid="<?php echo esc_attr( $item['drive_file_id'] ?? '' ); ?>">
-										<?php esc_html_e( 'Xóa', 'hibackup' ); ?>
-									</button>
-								</td>
+				<div class="hibackup-table-responsive">
+					<table class="wp-list-table widefat striped hibackup-history-table">
+						<thead>
+							<tr>
+								<th style="min-width: 180px;"><?php esc_html_e( 'Tên File', 'hibackup' ); ?></th>
+								<th style="min-width: 130px;"><?php esc_html_e( 'Thời gian', 'hibackup' ); ?></th>
+								<th style="min-width: 80px;"><?php esc_html_e( 'Dung lượng', 'hibackup' ); ?></th>
+								<th style="min-width: 120px;"><?php esc_html_e( 'Loại', 'hibackup' ); ?></th>
+								<th style="min-width: 110px;"><?php esc_html_e( 'Lưu trữ', 'hibackup' ); ?></th>
+								<th style="min-width: 160px;"><?php esc_html_e( 'Hành động', 'hibackup' ); ?></th>
 							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							<?php foreach ( $history as $item ) : ?>
+								<tr id="row-<?php echo esc_attr( $item['id'] ); ?>">
+									<td><strong class="hibackup-filename"><?php echo esc_html( $item['filename'] ); ?></strong></td>
+									<td><?php echo esc_html( date_i18n( 'd/m/Y H:i:s', $item['timestamp'] ) ); ?></td>
+									<td><span class="hibackup-badge-size"><?php echo esc_html( $item['file_size'] ); ?></span></td>
+									<td><span class="hibackup-badge-type"><?php echo esc_html( $item['type'] ); ?></span></td>
+									<td><span class="hibackup-badge-cloud"><span class="dashicons dashicons-google"></span> Google Drive</span></td>
+									<td>
+										<div class="hibackup-action-group">
+											<?php if ( ! empty( $item['drive_link'] ) ) : ?>
+												<a href="<?php echo esc_url( $item['drive_link'] ); ?>" target="_blank" class="button button-small hibackup-btn-drive" title="<?php esc_attr_e( 'Mở file trên Google Drive', 'hibackup' ); ?>">
+													<span class="dashicons dashicons-external"></span> <span><?php esc_html_e( 'Mở Drive', 'hibackup' ); ?></span>
+												</a>
+											<?php endif; ?>
+											<button type="button" class="button button-small hibackup-btn-delete btn-delete-history" data-id="<?php echo esc_attr( $item['id'] ); ?>" data-fileid="<?php echo esc_attr( $item['drive_file_id'] ?? '' ); ?>" title="<?php esc_attr_e( 'Xóa bản sao lưu', 'hibackup' ); ?>">
+												<span class="dashicons dashicons-trash"></span> <span><?php esc_html_e( 'Xóa', 'hibackup' ); ?></span>
+											</button>
+										</div>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
 			<?php endif; ?>
 		</div>
 		<?php

@@ -3,7 +3,7 @@
 - **Tên plugin:** HiBackup – Sao lưu WordPress lên Google Drive (0MB Hosting Footprint)
 - **Tác giả:** hiseo ([https://hiseo.vn](https://hiseo.vn))
 - **Mã nguồn GitHub:** [https://github.com/LeMinhQuan09/plugin_hibackup](https://github.com/LeMinhQuan09/plugin_hibackup)
-- **Phiên bản hiện tại:** `v1.1.0`
+- **Phiên bản hiện tại:** `v1.1.1`
 - **Ngày ghi nhận:** 22/10/2026
 
 ---
@@ -93,6 +93,39 @@ Trong phiên làm việc này, toàn bộ quy trình hoàn thiện UI/UX, sửa 
      - Tab **Sao lưu ngay**: hỗ trợ chọn tức thời chế độ `run_source_mode` trước khi bấm nút sao lưu.
      - Tab **Tùy chọn & Lịch trình**: lưu cấu hình `source_mode` làm mặc định cho các phiên backup tự động Cron.
      - Bổ sung nút "Chọn tất cả" bên trong ngăn kéo Custom của từng tab.
+
+---
+
+### 2.10. Hiện đại hóa UI "Phương thức kết nối" (Tab 2: Cấu hình Google Drive)
+- **Vấn đề:** Giao diện chọn phương thức kết nối Google Drive (OAuth 2.0 vs Service Account) dạng radio text đơn điệu, không tương xứng với thiết kế dạng Card hiện đại ở Tab 1 và Tab 3.
+- **Giải pháp:**
+  - Chuyển đổi sang hệ thống thẻ trực quan `.hibackup-mode-card`:
+    - **Thẻ 1: Google OAuth 2.0** với icon Google màu xanh lam, tiêu đề rõ ràng, mô tả, các nhãn tính năng (`✓ Đăng nhập 1-Click`, `✓ Gmail cá nhân`) và nút radio chọn góc phải.
+    - **Thẻ 2: Service Account JSON** với icon ID Card màu tím thanh lịch (`.hibackup-mode-icon-purple`), tiêu đề, mô tả, các nhãn tính năng (`✓ Tự động 100%`, `✓ Google Workspace`) và nút radio chọn.
+  - Viết Javascript đồng bộ trạng thái `.is-selected` khi click/toggle giữa 2 thẻ và tự động hiển thị đúng form cấu hình tương ứng bên dưới.
+  - Lưu ý: Giữ nguyên mã nguồn làm việc, không chạy build đóng gói ZIP hay git commit/tag giữa chừng theo yêu cầu người dùng để tiết kiệm thời gian.
+
+### 2.11. Thiết kế lại Bảng Lịch sử Sao lưu & Cụm Nút Hành động (Tab 4: Lịch sử)
+- **Vấn đề:** 
+  - Nút "Mở Drive" và "Xóa" bị dồn dọc, nút Xóa bị hiển thị thành một khung viền xanh thô kệch, dính sát dưới nút Mở Drive trông rất mất thẩm mỹ.
+  - Các ô trong bảng thiếu căn chỉnh trọng tâm (`vertical-align: middle`), bảng dùng style mặc định của WP thiếu bo góc và bóng đổ.
+- **Giải pháp:**
+  - Tạo cụm nút hành động nằm ngang chuyên nghiệp `.hibackup-action-group` (`display: inline-flex; align-items: center; gap: 8px;`).
+  - **Nút "Mở Drive":** Nút xanh Google Blue bo góc 6px, hiệu ứng đổ bóng và hover êm ái, icon mở liên kết ngoài.
+  - **Nút "Xóa":** Nút outline cảnh báo viền đỏ nhạt bo góc 6px, thêm icon thùng rác Dashicon (`dashicons-trash`), hover hiệu ứng nền đỏ nhạt chuyên nghiệp.
+  - Bo tròn viền bảng `.hibackup-history-table`, thêm badge dung lượng (`.hibackup-badge-size`), badge loại bản sao lưu (`.hibackup-badge-type`), badge Google Drive (`.hibackup-badge-cloud`), và căn giữa toàn bộ nội dung từng dòng.
+
+### 2.12. Xử lý Cuộn ngang Responsive & Chống Tràn Nút Bấm Bảng Lịch sử
+- **Vấn đề:** Khi độ phân giải màn hình hoặc kích thước khung chứa hẹp, các nút hành động (nút "Xóa") bị tràn mép phải và bị che khuất một phần do thiếu thanh cuộn ngang `overflow-x`.
+- **Giải pháp:**
+  - Bọc bảng vào thẻ `.hibackup-table-responsive` với thuộc tính `overflow-x: auto` và thanh cuộn ngang tùy biến mềm mại 8px (`scrollbar-width: thin; scrollbar-color: #cbd5e1 #f1f5f9;`).
+  - Tối ưu hóa lại `min-width` từng cột và cho phép tên file dài được xuống dòng tự nhiên (`word-break: break-all;`), giúp toàn bộ bảng vừa vặn hoàn hảo trên màn hình chuẩn đồng thời tự động kích hoạt thanh cuộn ngang mượt mà khi xem trên màn hình nhỏ.
+
+### 2.13. Đóng gói & Phát hành Bản vá Giao diện v1.1.1
+- Đồng bộ toàn bộ cải tiến giao diện vào phiên bản chính thức `v1.1.1`.
+- Kiểm tra linting toàn bộ file PHP, đảm bảo 0 lỗi cú pháp.
+- Đóng gói file ZIP phát hành sạch sẽ vào `dist/hibackup.zip` và lưu trữ `dist/hibackup-v1.1.1.zip`.
+- Commit và gắn tag `v1.1.1` đồng bộ lên kho chứa GitHub.
 
 ---
 
