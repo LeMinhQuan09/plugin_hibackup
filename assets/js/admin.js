@@ -196,7 +196,11 @@
 			});
 		});
 
-		// 5. Quản lý Chế độ Sao lưu (Tab Cấu hình chung)
+		// 5. Quản lý Chế độ Sao lưu & Thành phần (Tab Cấu hình chung)
+		$('input[name="backup_db"]').on('change', function () {
+			$('#card_options_db').toggleClass('is-checked', $(this).is(':checked'));
+		});
+
 		$('input[name="source_mode"]').on('change', function () {
 			var mode = $(this).val();
 			if (mode === 'full') {
@@ -209,6 +213,12 @@
 				$('#hibackup-custom-drawer-options').slideDown(200);
 			}
 		});
+
+		function syncOptionsSubChips() {
+			$('#hibackup-custom-drawer-options .options-sub-cb').each(function () {
+				$(this).closest('.hibackup-sub-chip').toggleClass('is-checked', $(this).is(':checked'));
+			});
+		}
 
 		function syncOptionsSubSelectAll() {
 			var $subCbs = $('#hibackup-custom-drawer-options .options-sub-cb');
@@ -223,11 +233,13 @@
 			} else {
 				$toggle.prop('checked', false).prop('indeterminate', true);
 			}
+			syncOptionsSubChips();
 		}
 
 		$('#options_toggle_sub_components').on('change', function () {
 			var isChecked = $(this).is(':checked');
 			$('#hibackup-custom-drawer-options .options-sub-cb').prop('checked', isChecked);
+			syncOptionsSubChips();
 		});
 
 		$('#hibackup-custom-drawer-options .options-sub-cb').on('change', function () {
@@ -236,7 +248,11 @@
 
 		syncOptionsSubSelectAll();
 
-		// 6. Quản lý Chế độ Sao lưu (Tab Sao lưu ngay)
+		// 6. Quản lý Chế độ Sao lưu & Thành phần (Tab Sao lưu ngay)
+		$('#run_include_db').on('change', function () {
+			$('#card_run_db').toggleClass('is-checked', $(this).is(':checked'));
+		});
+
 		$('input[name="run_source_mode"]').on('change', function () {
 			var mode = $(this).val();
 			if (mode === 'full') {
@@ -249,6 +265,12 @@
 				$('#hibackup-custom-drawer-run').slideDown(200);
 			}
 		});
+
+		function syncRunSubChips() {
+			$('#hibackup-custom-drawer-run .run-sub-cb').each(function () {
+				$(this).closest('.hibackup-sub-chip').toggleClass('is-checked', $(this).is(':checked'));
+			});
+		}
 
 		function syncRunSubSelectAll() {
 			var $subCbs = $('#hibackup-custom-drawer-run .run-sub-cb');
@@ -263,11 +285,13 @@
 			} else {
 				$toggle.prop('checked', false).prop('indeterminate', true);
 			}
+			syncRunSubChips();
 		}
 
 		$('#run_toggle_sub_components').on('change', function () {
 			var isChecked = $(this).is(':checked');
 			$('#hibackup-custom-drawer-run .run-sub-cb').prop('checked', isChecked);
+			syncRunSubChips();
 		});
 
 		$('#hibackup-custom-drawer-run .run-sub-cb').on('change', function () {
